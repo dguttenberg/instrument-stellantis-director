@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from pydantic import AliasChoices, Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 # Repo root = three levels up from this file (src/director_agent/config.py).
@@ -29,8 +30,19 @@ class Settings(BaseSettings):
     bg_base_url: str = "https://bg-admin.donercolle.dev"
     bg_api_key: str = ""
 
-    # Local draft store + outputs
+    # Draft store. "local" = SQLite (dev); "upstash" = Upstash Redis (serverless).
+    draft_store_backend: str = "local"
     draft_store_path: str = "data/draftstore.sqlite"
+    # Upstash creds are auto-injected by the Vercel Upstash integration. The
+    # integration may name them UPSTASH_REDIS_REST_* or KV_REST_API_* — accept both.
+    upstash_redis_rest_url: str = Field(
+        "", validation_alias=AliasChoices("UPSTASH_REDIS_REST_URL", "KV_REST_API_URL")
+    )
+    upstash_redis_rest_token: str = Field(
+        "", validation_alias=AliasChoices("UPSTASH_REDIS_REST_TOKEN", "KV_REST_API_TOKEN")
+    )
+
+    # On Vercel the filesystem is read-only except /tmp; set SUBSTANCE_OUT_PATH=/tmp/...
     substance_out_path: str = "out/substance_rows.xlsx"
 
     @property

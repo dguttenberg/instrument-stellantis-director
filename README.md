@@ -74,6 +74,40 @@ runs fully offline (no API key needed). Only `run_demo.py` makes live calls.
 
 ---
 
+## Deploy to Vercel (API-only)
+
+The app deploys to Vercel as a FastAPI serverless function. Two serverless
+constraints are handled: the SQLite draft store is swapped for **Upstash Redis**
+(Vercel function FS is read-only/ephemeral), and the Substance xlsx is rebuilt on
+the fly via `GET /substance.xlsx` (the in-run `/tmp` copy doesn't persist). The
+`/docs` Swagger UI is the shareable surface.
+
+**One-time setup on the Vercel project:**
+1. Provision Upstash Redis: dashboard → Storage → Marketplace → Upstash (or
+   `vercel install upstash`). It auto-injects the REST URL/token env vars.
+2. Set env vars (Production + Preview):
+   - `ANTHROPIC_API_KEY` — mark **Sensitive**
+   - `BG_MODE=fixture` — read `data/bg_fixtures/`, don't call the (not-yet-live) BG endpoint
+   - `DRAFT_STORE_BACKEND=upstash`
+   - `SUBSTANCE_OUT_PATH=/tmp/substance_rows.xlsx`
+   - Upstash creds: auto-injected. Config accepts either `UPSTASH_REDIS_REST_URL`/
+     `UPSTASH_REDIS_REST_TOKEN` or `KV_REST_API_URL`/`KV_REST_API_TOKEN`.
+3. Push to `main` → Vercel auto-builds (entrypoint pinned in `pyproject.toml`).
+
+**Verify after deploy:** `GET /health`, open `/docs`, `POST /run` for one lane
+(~30s–2min, within the 300s function ceiling), `GET /drafts`, `GET /substance.xlsx`.
+
+**If the build errors `ModuleNotFoundError: No module named 'director_agent'`:**
+the builder is running from the repo root — change the `pyproject.toml`
+`[tool.vercel] entrypoint` to `src.director_agent.api.app:app`.
+
+> Note: `POST /run` is a synchronous multi-minute request (6 sequential Claude
+> calls/lane). It fits the 300s ceiling but a browser/proxy may drop a long idle
+> connection — fine for low-traffic manual use via `/docs`. A per-cell endpoint +
+> live matrix UI is the upgrade if you want the in-room "watch it fill" demo.
+
+---
+
 ## Brand Gravity is a live service — not built here
 
 Brand Gravity is a live, consumer-grade data application (admin GUI at

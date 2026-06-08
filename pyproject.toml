@@ -12,6 +12,7 @@ dependencies = [
     "openpyxl>=3.1",
     "httpx>=0.27",
     "python-dotenv>=1.0",
+    "upstash-redis>=1.2",
 ]
 
 [project.optional-dependencies]
@@ -20,6 +21,13 @@ dev = ["pytest>=8.0", "ruff>=0.4"]
 [build-system]
 requires = ["setuptools>=68"]
 build-backend = "setuptools.build_meta"
+
+# Vercel FastAPI entrypoint. src-layout makes `director_agent` the top-level
+# import (packages.find where=["src"]), so NO `src.` prefix. If a deploy errors
+# with `ModuleNotFoundError: No module named 'director_agent'`, the builder is
+# running from the repo root instead — switch to "src.director_agent.api.app:app".
+[tool.vercel]
+entrypoint = "director_agent.api.app:app"
 
 [tool.setuptools.packages.find]
 where = ["src"]
