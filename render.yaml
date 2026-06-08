@@ -1,0 +1,22 @@
+# Render Blueprint — one persistent web service from the Dockerfile, with a disk
+# for the draft + project stores. (Railway/Fly: use the Dockerfile directly and set
+# the same env vars + a volume mounted at /data.)
+services:
+  - type: web
+    name: instrument-stellantis-director
+    runtime: docker
+    plan: starter
+    healthCheckPath: /health
+    envVars:
+      - key: ANTHROPIC_API_KEY
+        sync: false          # set in the Render dashboard (secret)
+      - key: APP_PASSWORD
+        sync: false          # the shared password to enter the app
+      - key: DIRECTOR_MODEL
+        value: claude-opus-4-8
+      - key: BG_MODE
+        value: fixture
+    disk:
+      name: data
+      mountPath: /data        # draft store + working project persist here
+      sizeGB: 1

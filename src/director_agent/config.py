@@ -33,6 +33,8 @@ class Settings(BaseSettings):
     # Draft store. "local" = SQLite (dev); "upstash" = Upstash Redis (serverless).
     draft_store_backend: str = "local"
     draft_store_path: str = "data/draftstore.sqlite"
+    # Working-project file. Point both stores at a mounted volume (e.g. /data) when hosted.
+    project_store_path: str = "data/project.json"
     # Upstash creds are auto-injected by the Vercel Upstash integration. The
     # integration may name them UPSTASH_REDIS_REST_* or KV_REST_API_* — accept both.
     upstash_redis_rest_url: str = Field(
@@ -48,6 +50,10 @@ class Settings(BaseSettings):
     @property
     def draft_store_abspath(self) -> Path:
         return _resolve(self.draft_store_path)
+
+    @property
+    def project_store_abspath(self) -> Path:
+        return _resolve(self.project_store_path)
 
     @property
     def substance_out_abspath(self) -> Path:

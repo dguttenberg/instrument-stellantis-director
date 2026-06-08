@@ -139,6 +139,17 @@ CellOutput = Annotated[
 # --------------------------------------------------------------------------- #
 # Envelope (spec §5) — one object per cell, draft=true until approved.
 # --------------------------------------------------------------------------- #
+class ProvenanceEntry(BaseModel):
+    """What the director was 'directed from' — a resolved BG slice (spec §4)."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    key: str
+    bucket: str
+    scope_resolved: str
+    confidence: Confidence
+
+
 class CellOutputEnvelope(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
@@ -147,6 +158,9 @@ class CellOutputEnvelope(BaseModel):
     draft: bool = True
     outputs: List[CellOutput]
     gaps_flagged: List[str] = Field(default_factory=list)
+    # Set by the runner (not the director): the slices this cell resolved against,
+    # surfaced in the UI so review has something to check against.
+    provenance: List[ProvenanceEntry] = Field(default_factory=list)
 
 
 CellInput.model_rebuild()

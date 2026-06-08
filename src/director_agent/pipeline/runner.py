@@ -18,7 +18,7 @@ from ..director.cell_specs import buckets_for
 from ..draftstore.store import DraftRecord, DraftStore
 from ..outputs.substance_excel import append_substance_rows
 from ..schemas.bg import BGRequest
-from ..schemas.cell import CellInput, CellOutputEnvelope, ScriptPosition, SubstanceRow
+from ..schemas.cell import CellInput, CellOutputEnvelope, ProvenanceEntry, ScriptPosition, SubstanceRow
 from ..schemas.dials import Dials, StylingInputs
 from ..schemas.script import Scene, Script
 from ..bg.client import BGClient
@@ -80,6 +80,53 @@ class PipelineRunner:
         self.substance_out_path = Path(substance_out_path)
         self.season = season
 
+    def run_cell(
+        self,
+        scene: Scene,
+        script: Script,
+        lane: str,
+        dials: Dials,
+        styling: StylingInputs,
+        prior_cell_resolved: Optional[dict] = None,
+        brand: str = "ram",
+    ) -> tuple:
+        """Resolve + direct + draft a single cell. Returns (envelope, record).
+        The unit the per-cell API endpoint and the full run() both build on."""
+        cell = _cell_input_from_scene(scene, script, lane)
+        needs = buckets_for(cell.cell_type, cell.trim_intent, self.season)
+        request = BGRequest(
+            request_id=str(uuid.uuid4()),
+            brand=brand,
+            lane=lane,
+            buckets_needed=needs,
+            context_hint=cell.scene_description,
+        )
+        slices = self.bg_client.resolve(request)
+        envelope = self.director.run(cell, slices, dials, styling, prior_cell_resolved=prior_cell_resolved)
+
+        # Provenance: what this cell was directed from (surfaced in review).
+        envelope.provenance = [
+            ProvenanceEntry(
+                key=key,
+                bucket=key.split(".")[0],
+                scope_resolved=sl.scope_resolved,
+                confidence=sl.confidence,
+            )
+            for key, sl in slices.slices.items()
+        ]
+
+        # Surface brand-rule invariant violations as review flags (spec §3 rules).
+        hexes, angles = _catalog_constraints(slices)
+        for v in check_envelope(envelope, available_hex=hexes, available_camera_angles=angles):
+            envelope.gaps_flagged.append(f"invariant: {v}")
+
+        sub_rows = [o for o in envelope.outputs if isinstance(o, SubstanceRow)]
+        if sub_rows:
+            append_substance_rows(sub_rows, self.substance_out_path)
+
+        record = self.draft_store.put(envelope)
+        return envelope, record
+
     def run(
         self,
         script: Script,
@@ -93,28 +140,9 @@ class PipelineRunner:
         prior_resolved: Optional[dict] = None
 
         for scene in script.scenes:
-            cell = _cell_input_from_scene(scene, script, lane)
-            needs = buckets_for(cell.cell_type, cell.trim_intent, self.season)
-            request = BGRequest(
-                request_id=str(uuid.uuid4()),
-                brand=brand,
-                lane=lane,
-                buckets_needed=needs,
-                context_hint=cell.scene_description,
+            envelope, record = self.run_cell(
+                scene, script, lane, dials, styling, prior_resolved, brand
             )
-            slices = self.bg_client.resolve(request)
-            envelope = self.director.run(cell, slices, dials, styling, prior_cell_resolved=prior_resolved)
-
-            # Surface brand-rule invariant violations as review flags (spec §3 rules).
-            hexes, angles = _catalog_constraints(slices)
-            for v in check_envelope(envelope, available_hex=hexes, available_camera_angles=angles):
-                envelope.gaps_flagged.append(f"invariant: {v}")
-
-            sub_rows = [o for o in envelope.outputs if isinstance(o, SubstanceRow)]
-            if sub_rows:
-                append_substance_rows(sub_rows, self.substance_out_path)
-
-            record = self.draft_store.put(envelope)
             records.append(record)
             envelopes.append(envelope)
             prior_resolved = envelope.model_dump()

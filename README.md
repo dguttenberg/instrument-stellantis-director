@@ -56,11 +56,40 @@ Key env vars (see `.env.example`): `ANTHROPIC_API_KEY`, `DIRECTOR_MODEL`
 python scripts/run_demo.py          # South:15 through great_lakes then southwest; prints the matrix
 ```
 
-## Run the service
+## Run the local web app (DCP-branded)
+
+```bash
+uvicorn director_agent.api.app:app --reload --port 8000
+# open http://localhost:8000/
+```
+
+A DonerColle Partners–branded workflow application:
+
+1. **Upload** a `.pdf` or `.pptx` storyboard deck → Claude extracts a draft scene
+   matrix with a **suggested technique** per scene (`POST /ingest`). Ships seeded
+   with the bundled South:15 so it's never empty.
+2. **Confirm the matrix** — each scene row is editable: a technique (cell_type)
+   dropdown plus editable description / super / trim (`PUT /project/scenes/{i}`).
+3. **Run by region** — **Run Great Lakes** / **Run Southwest** fill the matrix
+   cell-by-cell, one live director call each (`POST /run/cell`), threading
+   continuity.
+4. **Review & edit** — click a cell to see a **provenance summary** ("directed
+   from: environmental_context (high)…") and **edit every output the director
+   made** (super copy, query, prompts, Substance hex/trim/camera); Save
+   (`PUT /drafts/{id}`, re-validated + re-flagged) and Approve (§7 gate).
+5. **Export per tool** — **CGI `.xlsx`** (Substance rows + AI/Runway env-ref
+   sheet) and **TwelveLabs `.csv` / `.json`** (footage + stock retrieval queries).
+   Exports build from the store, so they include your edits.
+
+Retrieval queries (TwelveLabs/stock) are written **broad and findable** (content
+search); generative prompts (Substance AI prompt, cg_env) stay richly specific.
+Served at `/`; the raw API is at `/docs`.
+
+## Run the service (API only)
 
 ```bash
 uvicorn director_agent.api.app:app --reload
-# POST /run with {script, lane, dials?, styling, season}
+# POST /run with {script, lane, dials?, styling, season}; or POST /run/cell for one cell
 ```
 
 ## Tests
@@ -71,6 +100,43 @@ pytest                              # schema, fixtures, substance xlsx, runner, 
 
 The director-plumbing and runner tests use a fake Anthropic client, so the suite
 runs fully offline (no API key needed). Only `run_demo.py` makes live calls.
+
+---
+
+## Deploy (hosted) — persistent container
+
+The app is stateful (working project + draft store on disk), takes deck uploads,
+and makes long live calls — so it's hosted as a **persistent container**, not
+serverless. The `Dockerfile` runs the current code as-is; `render.yaml` is a
+one-service Render blueprint (Railway/Fly work the same way with the Dockerfile).
+
+**Steps (Render):**
+1. Push to GitHub; in Render: New → Blueprint → pick the repo (uses `render.yaml`).
+2. Set secrets in the dashboard: `ANTHROPIC_API_KEY` and `APP_PASSWORD` (the shared
+   password to enter the app).
+3. Deploy. The blueprint mounts a 1 GB disk at `/data`, where `draftstore.sqlite`
+   and `project.json` persist across restarts.
+
+**Access:** when `APP_PASSWORD` is set, the whole app is behind an HTTP Basic gate
+(any username, that password); `/health` stays open for the platform health check.
+Leave `APP_PASSWORD` unset locally for no auth.
+
+**Hosting notes / current limits:**
+- **Single shared workspace** — one working project + draft store for everyone
+  (effectively one deck at a time). Per-user workspaces would need the stores scoped
+  by login.
+- Uploads + long ingest/run calls work on a container (no serverless body-size cap
+  or cold-start drops).
+- `BG_MODE=fixture` ships the bundled RAM fixtures; flip to `http` when live Brand
+  Gravity is wired.
+
+Build/run the container locally:
+```bash
+docker build -t director-agent .
+docker run -p 8000:8000 -e ANTHROPIC_API_KEY=sk-ant-... -e APP_PASSWORD=secret \
+  -v "$PWD/data:/data" director-agent
+# open http://localhost:8000/  (enter any username + the password)
+```
 
 ---
 

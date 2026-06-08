@@ -1,14 +1,14 @@
 .venv/
 venv/
+.git/
 __pycache__/
 *.pyc
-.env
-*.egg-info/
 .pytest_cache/
 .ruff_cache/
-# local draft store + working project + generated demo outputs
+tests/
+*.egg-info/
+.env
 data/draftstore.sqlite
 data/project.json
 out/
-*.xlsx.out.xlsx
 .DS_Store

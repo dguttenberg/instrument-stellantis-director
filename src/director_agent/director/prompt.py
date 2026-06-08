@@ -57,6 +57,23 @@ Rules you must honor:
     everything to high.
   - You read the prior cell's resolved output and continue from it. Frame N is
     aware of Frame N-1's ending.
+  - RETRIEVAL queries and GENERATIVE prompts are NOT the same and must be written
+    differently:
+      * A `twelvelabs_query` or `stock_search` is a CONTENT SEARCH against an
+        existing footage library. Keep it SHORT and FINDABLE (aim <= 15 words) —
+        but NOT generic. Include: the vehicle/nameplate (e.g. Ram 1500), the action,
+        the shot type, the light (daylight/interior), AND one or two BROAD location
+        or season cues drawn from environmental_context/audience_resonance (the
+        region name, the season, a common setting type like "rural two-lane" or
+        "snow"). That light regional intelligence helps. What you must DROP is the
+        hyper-specific pile-up — named landmarks, palette adjectives, micro-objects,
+        weather minutiae — which over-constrains the search and returns nothing.
+        Think: "broad but regionally flavored," not "a paragraph" and not "stripped
+        to nothing."
+      * A `cg_env_prompt` or the Substance `AI Image Generator Prompt` is a
+        GENERATIVE brief. There, be richly specific — palette, light, regional
+        objects, negatives — because you're describing an image to create, not
+        searching for one.
   - Output strictly matches the cell-type schema. No extra fields, no missing fields.
 
 You compose the cell output by calling the `emit_cell_output` tool exactly once.
@@ -67,25 +84,27 @@ output object for this cell type via the tool. JSON only.\
 
 CELL_GUIDANCE = {
     "regionalized_running_w_cgi_ai": (
-        "This cell is the cheaper regionalization path: TwelveLabs finds running footage of the "
-        "vehicle, AI generates regional environment references, and the environment is composited "
-        "behind the vehicle. Emit a `twelvelabs_query` (vehicle + action, environment-agnostic since "
-        "it will be replaced), a `cg_env_prompt` for the environment-replacement references (blend the "
-        "color/look against the environmental palette, carry continuity from the prior cell), and a "
-        "`super_text` if the script directs one. No Substance row (the vehicle is in the footage). If no "
-        "usable footage could plausibly match, emit a `gap_signal` for the future-shoot tracker."
+        "RECOMMENDATION: regionalize via a CG/AI environment behind the existing vehicle plate. The "
+        "headline deliverable is the `cg_env_prompt` — write it richly specific (palette, light, regional "
+        "objects, negatives), blended against the environmental palette and continuous with the prior cell. "
+        "ALSO emit a `twelvelabs_query` as a SUPPORTING base-plate reference (which existing running plate "
+        "to composite onto): keep it short and findable — vehicle + action + shot + light + a broad region/"
+        "season cue. Emit a `super_text` if the script directs one. No Substance row (the vehicle is in the "
+        "plate)."
     ),
     "stock": (
-        "This is the lightest cell: find establishing stock footage with regional fit. Emit a "
-        "`stock_search` with a tight natural-language description AND structured tags_for_indexed_search "
-        "(the contract supports both stock-house search and indexed TwelveLabs search). Emit a "
-        "`super_text` if the script directs one. Keep director interpretation light."
+        "RECOMMENDATION: find establishing stock footage (TwelveLabs / stock library). Emit a "
+        "`stock_search` that reads like a real stock query — a short natural-language description plus "
+        "broad, findable tags_for_indexed_search (setting type, season, time of day, no-people, "
+        "establishing) carrying a light region cue. Keep it findable, not a paragraph. Emit a `super_text` "
+        "if the script directs one."
     ),
     "existing_running_footage": (
-        "This is pure TwelveLabs retrieval — find regional running footage as-is (the best use case for "
-        "TwelveLabs). Emit a sharp `twelvelabs_query` capturing region, vehicle, action, and feature focus, "
-        "plus a `super_text` if the script directs one. If no footage matches, emit a `gap_signal` "
-        "(lane, vehicle, shot type) for the future-shoot tracker."
+        "RECOMMENDATION (PRIMARY/preferred): reuse core running footage from the original spot — pure "
+        "TwelveLabs retrieval. Emit one `twelvelabs_query`: the vehicle (Ram 1500), the action, the shot "
+        "type, the feature in focus (e.g. a badge), the light, AND a broad region/season cue — short and "
+        "findable (<= 15 words), not a hyper-specific pile-up. Emit a `super_text` if the script directs "
+        "one. If no footage could match, emit a `gap_signal` (lane, vehicle, shot type)."
     ),
     "regionalized_ai_scenes": (
         "This is the most custom cell — Substance renders the vehicle from USD, Runway renders the "

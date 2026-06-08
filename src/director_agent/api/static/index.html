@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brand Gravity · Production Pipeline Agent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --dcp-midnight:#000531;--dcp-grey:#E6E7E8;--dcp-violet:#545DFF;--dcp-green:#20FE8F;
+  --dcp-sky:#76BEFF;--dcp-ember:#FF8371;--dcp-white:#FFFFFF;
+  --dcp-green-a15:rgba(32,254,143,0.15);--dcp-violet-a10:rgba(84,93,255,0.10);
+  --dcp-violet-a20:rgba(84,93,255,0.20);--dcp-sky-a20:rgba(118,190,255,0.20);--dcp-ember-a20:rgba(255,131,113,0.20);
+  --dcp-font:'DM Sans','Helvetica Neue',Arial,sans-serif;--dcp-radius:12px;--dcp-radius-sm:6px;--dcp-max:1320px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--dcp-font);background:var(--dcp-midnight);color:var(--dcp-white);-webkit-font-smoothing:antialiased}
+.wrap{max-width:var(--dcp-max);margin:0 auto;padding:0 36px}
+/* Nav */
+.dcp-nav{background:var(--dcp-midnight);display:flex;align-items:center;justify-content:space-between;padding:0 36px;height:66px;position:sticky;top:0;z-index:100;border-bottom:1px solid var(--dcp-green-a15)}
+.dcp-logo{display:flex;align-items:center;gap:13px}
+.dcp-logo-mark{font-weight:700;font-size:26px;color:var(--dcp-green);letter-spacing:-0.03em;line-height:1}
+.dcp-logo-wordmark{font-weight:700;font-size:10px;line-height:1.25;color:var(--dcp-white);text-transform:uppercase;letter-spacing:0.04em;border-left:1px solid rgba(255,255,255,0.25);padding-left:13px}
+.dcp-nav-title{font-size:12px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.55)}
+/* Hero */
+.hero{padding:34px 0 22px;background:radial-gradient(ellipse at 12% 95%,rgba(84,93,255,0.34) 0%,transparent 55%),var(--dcp-midnight)}
+.eyebrow{font-size:11px;font-weight:600;letter-spacing:0.22em;text-transform:uppercase;color:var(--dcp-green);margin-bottom:10px}
+.hero h1{font-weight:700;font-size:clamp(26px,3.6vw,40px);line-height:1.04;text-transform:uppercase;letter-spacing:-0.02em}
+.hero h1 em{font-style:normal;color:var(--dcp-green)}
+.steps{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+.step{font-size:10.5px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:rgba(255,255,255,0.5);background:rgba(255,255,255,0.04);border:1px solid var(--dcp-violet-a20);border-radius:30px;padding:6px 13px}
+.step b{color:var(--dcp-violet)}
+/* Bars */
+.bar{display:flex;gap:14px;align-items:center;flex-wrap:wrap;background:rgba(255,255,255,0.03);border:1px solid var(--dcp-violet-a20);border-radius:var(--dcp-radius);padding:16px 18px;margin-top:18px}
+.bar .label{font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:var(--dcp-violet)}
+.dropzone{flex:1;min-width:260px;border:1.5px dashed var(--dcp-violet-a20);border-radius:var(--dcp-radius-sm);padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:border-color .2s,background .2s}
+.dropzone:hover,.dropzone.drag{border-color:var(--dcp-green);background:var(--dcp-green-a15)}
+.dropzone .dz-main{font-size:13px;font-weight:600;color:var(--dcp-white)}
+.dropzone .dz-sub{font-size:11px;color:rgba(255,255,255,0.45)}
+.status-note{font-size:12px;color:var(--dcp-sky)}
+.btn{font-family:var(--dcp-font);font-weight:700;font-size:12px;letter-spacing:0.09em;text-transform:uppercase;border-radius:40px;border:none;cursor:pointer;padding:12px 22px;transition:opacity .2s,background .2s,color .2s;text-decoration:none;text-align:center;display:inline-block;white-space:nowrap}
+.btn-primary{background:var(--dcp-green);color:var(--dcp-midnight)}.btn-primary:hover{opacity:.85}
+.btn-violet{background:var(--dcp-violet);color:var(--dcp-white)}.btn-violet:hover{opacity:.85}
+.btn-outline{background:transparent;color:var(--dcp-green);border:1.5px solid var(--dcp-green)}.btn-outline:hover{background:var(--dcp-green);color:var(--dcp-midnight)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn-sm{padding:8px 15px;font-size:11px}
+/* Dials */
+.dials-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;flex:1;min-width:420px}
+.dial-name{font-size:12px;font-weight:600;color:rgba(255,255,255,0.8);display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.dial-name .v{color:var(--dcp-green);font-weight:700;font-variant-numeric:tabular-nums}
+.dial-name .star{color:var(--dcp-green);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;font-weight:700}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:4px;border-radius:4px;background:linear-gradient(90deg,var(--dcp-violet) var(--p,60%),rgba(255,255,255,0.12) var(--p,60%));outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;border-radius:50%;background:var(--dcp-green);cursor:pointer;border:2px solid var(--dcp-midnight);box-shadow:0 0 0 1px var(--dcp-green)}
+/* Matrix */
+.matrix-section{padding:26px 0 70px}
+.matrix-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:12px}
+.matrix-head h2{font-weight:700;font-size:22px;text-transform:uppercase;letter-spacing:-0.01em}
+.legend{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.legend span{font-size:10.5px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:rgba(255,255,255,0.55);display:flex;align-items:center;gap:6px}
+.dot{width:9px;height:9px;border-radius:50%;display:inline-block}
+.matrix{display:grid;grid-template-columns:360px 1fr 1fr;gap:12px}
+.empty-state{border:1.5px dashed var(--dcp-violet-a20);border-radius:var(--dcp-radius);padding:54px 30px;text-align:center}
+.empty-state .es-big{font-size:18px;font-weight:700;color:var(--dcp-white);text-transform:uppercase;letter-spacing:0.02em;margin-bottom:8px}
+.empty-state .es-sub{font-size:13px;color:rgba(255,255,255,0.45)}
+.col-head{font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:var(--dcp-green);padding:0 4px 6px;border-bottom:2px solid var(--dcp-green);display:flex;justify-content:space-between;align-items:center}
+.col-head.scene-col{color:rgba(255,255,255,0.45);border-bottom-color:var(--dcp-violet-a20)}
+/* Scene (editable) */
+.scene-cell{padding:12px;border:1px solid var(--dcp-violet-a10);border-radius:var(--dcp-radius);background:rgba(255,255,255,0.02)}
+.scene-row1{display:flex;gap:10px;align-items:center;margin-bottom:8px}
+.scene-idx{font-weight:700;font-size:22px;color:var(--dcp-violet);line-height:1;min-width:24px}
+select,.fld{font-family:var(--dcp-font);background:var(--dcp-midnight);color:var(--dcp-white);border:1px solid var(--dcp-violet-a20);border-radius:var(--dcp-radius-sm);padding:7px 9px;font-size:12px;width:100%}
+select{cursor:pointer;color:var(--dcp-green);font-weight:600}
+.fld:focus,select:focus{outline:none;border-color:var(--dcp-green)}
+.scene-cell label{font-size:9.5px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.4);display:block;margin:7px 0 3px}
+textarea.fld{resize:vertical;min-height:38px;line-height:1.4}
+/* Lane cell */
+.lane-cell{border:1px solid var(--dcp-violet-a20);border-radius:var(--dcp-radius);padding:13px 14px;min-height:70px;display:flex;flex-direction:column;gap:8px;transition:border-color .2s,transform .15s}
+.lane-cell.clickable{cursor:pointer}.lane-cell.clickable:hover{border-color:var(--dcp-green);transform:translateY(-2px)}
+.lane-cell.empty{align-items:center;justify-content:center;color:rgba(255,255,255,0.22);font-size:11px;letter-spacing:0.08em;text-transform:uppercase}
+.lane-cell.running{border-color:var(--dcp-sky)}.lane-cell.error{border-color:var(--dcp-ember)}
+.cell-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.chips{display:flex;flex-wrap:wrap;gap:5px}
+.chip{font-size:10px;font-weight:600;padding:4px 8px;border-radius:30px;background:var(--dcp-violet-a10);color:var(--dcp-sky);border:1px solid var(--dcp-violet-a20);display:flex;align-items:center;gap:5px}
+.chip .sw{width:10px;height:10px;border-radius:3px;border:1px solid rgba(255,255,255,0.3)}
+.badge{font-size:9px;font-weight:700;letter-spacing:0.09em;text-transform:uppercase;padding:4px 8px;border-radius:30px;white-space:nowrap}
+.badge.auto_accept{background:var(--dcp-green-a15);color:var(--dcp-green)}
+.badge.needs_approve{background:var(--dcp-sky-a20);color:var(--dcp-sky)}
+.badge.blocked{background:var(--dcp-ember-a20);color:var(--dcp-ember)}
+.badge.approved{background:var(--dcp-green);color:var(--dcp-midnight)}
+.cell-flags{font-size:10.5px;color:var(--dcp-ember);line-height:1.4}
+/* Recommendation clarity */
+.rec-line{font-size:11px;margin-top:8px;display:flex;align-items:center;gap:7px;flex-wrap:wrap;min-height:20px}
+.rec-tool{font-size:9px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:3px 8px;border-radius:30px;white-space:nowrap}
+.rec-tool.twelvelabs{background:var(--dcp-green-a15);color:var(--dcp-green)}
+.rec-tool.cgai{background:var(--dcp-violet-a20);color:var(--dcp-sky)}
+.rec-headline{color:rgba(255,255,255,0.72);font-weight:600}
+.rec-primary{font-size:8.5px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--dcp-midnight);background:var(--dcp-green);padding:2px 7px;border-radius:20px}
+.chip.primary{border-color:var(--dcp-green);color:var(--dcp-white);font-weight:700}
+.chip.supporting{opacity:0.6;background:transparent;border-style:dashed}
+.chip.super{background:transparent;color:rgba(255,255,255,0.5);border-color:var(--dcp-violet-a20)}
+.rec-banner{display:flex;align-items:center;gap:11px;flex-wrap:wrap;background:var(--dcp-violet-a10);border:1px solid var(--dcp-violet-a20);border-radius:var(--dcp-radius-sm);padding:11px 14px;margin:14px 0}
+.rec-banner .rb-head{font-size:9.5px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--dcp-violet)}
+.rec-banner .rb-text{font-size:15px;font-weight:700;color:var(--dcp-white)}
+.sec-label{font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin:4px 0 10px;padding-top:6px;border-top:1px dashed var(--dcp-violet-a20)}
+.spinner{width:14px;height:14px;border:2px solid var(--dcp-violet-a20);border-top-color:var(--dcp-sky);border-radius:50%;animation:spin .7s linear infinite}
+.running-label{font-size:10.5px;color:var(--dcp-sky);letter-spacing:0.08em;text-transform:uppercase}
+@keyframes spin{to{transform:rotate(360deg)}}
+/* Modal */
+.overlay{position:fixed;inset:0;background:rgba(0,5,49,0.82);backdrop-filter:blur(3px);display:none;align-items:center;justify-content:center;z-index:200;padding:28px}
+.overlay.open{display:flex}
+.modal{background:var(--dcp-midnight);border:1px solid var(--dcp-green-a15);border-radius:var(--dcp-radius);max-width:820px;width:100%;max-height:88vh;overflow:auto;padding:28px 30px}
+.modal-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
+.modal-head h3{font-weight:700;font-size:19px;text-transform:uppercase;letter-spacing:-0.01em}
+.modal-sub{font-size:12px;color:rgba(255,255,255,0.5);margin:4px 0 6px}
+.close-x{background:none;border:none;color:rgba(255,255,255,0.5);font-size:24px;cursor:pointer;line-height:1}.close-x:hover{color:var(--dcp-green)}
+.prov{background:var(--dcp-violet-a10);border:1px solid var(--dcp-violet-a20);border-radius:var(--dcp-radius-sm);padding:11px 13px;margin:14px 0;font-size:11.5px;color:rgba(255,255,255,0.7);line-height:1.6}
+.prov b{color:var(--dcp-violet);text-transform:uppercase;letter-spacing:0.08em;font-size:10px}
+.prov .pv{color:var(--dcp-green);font-weight:600}
+.out-block{border:1px solid var(--dcp-violet-a20);border-radius:var(--dcp-radius-sm);padding:14px 16px;margin-bottom:13px}
+.out-block-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.out-type{font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--dcp-green)}
+.modal-flags{background:var(--dcp-ember-a20);border-radius:var(--dcp-radius-sm);padding:11px 13px;margin-bottom:13px;font-size:11.5px;color:var(--dcp-ember);line-height:1.5}
+.modal-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:6px;position:sticky;bottom:-28px;background:var(--dcp-midnight);padding:14px 0 2px;border-top:1px solid var(--dcp-violet-a10)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.f-wrap label{font-size:9.5px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.4);display:block;margin-bottom:3px}
+.hexrow{display:flex;gap:8px;align-items:center}
+.hexrow input[type=color]{width:36px;height:34px;border:none;background:none;border-radius:6px;cursor:pointer;padding:0}
+footer{background:var(--dcp-midnight);border-top:1px solid var(--dcp-green-a15);padding:30px 0;margin-top:10px}
+.foot-inner{display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap}
+.foot-copy{font-size:11px;color:rgba(255,255,255,0.3)}
+@media(max-width:1000px){.matrix{grid-template-columns:1fr}.dials-grid{grid-template-columns:1fr 1fr;min-width:0}}
+</style>
+</head>
+<body>
+<nav class="dcp-nav">
+  <div class="dcp-logo"><div class="dcp-logo-mark">DCP</div><div class="dcp-logo-wordmark">Doner<br>Colle<br>Partners.</div></div>
+  <div class="dcp-nav-title">Brand Gravity · Production Pipeline</div>
+</nav>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="eyebrow">RAM · Tier 2 Retail · Director</div>
+    <h1>Upload the deck. <em>Build the matrix.</em></h1>
+    <div class="steps">
+      <span class="step"><b>1</b> Upload deck</span>
+      <span class="step"><b>2</b> Confirm matrix</span>
+      <span class="step"><b>3</b> Run by region</span>
+      <span class="step"><b>4</b> Review &amp; edit</span>
+      <span class="step"><b>5</b> Export CGI + TwelveLabs</span>
+    </div>
+
+    <div class="bar">
+      <div class="label">Deck</div>
+      <div class="dropzone" id="dropzone" onclick="document.getElementById('file').click()">
+        <div>
+          <div class="dz-main" id="dz-main">Drop a .pdf or .pptx storyboard — or click to browse</div>
+          <div class="dz-sub" id="dz-sub">Claude extracts a draft matrix; you confirm the technique per scene.</div>
+        </div>
+      </div>
+      <input type="file" id="file" accept=".pdf,.pptx,.ppt" style="display:none" onchange="upload(this.files[0])">
+      <button class="btn btn-outline btn-sm" onclick="loadSample()">Load sample</button>
+      <span class="status-note" id="ingest-status"></span>
+    </div>
+
+    <div class="bar">
+      <div class="dials-grid" id="dials"></div>
+    </div>
+
+    <div class="bar">
+      <div class="label">Run</div>
+      <button class="btn btn-primary" id="run-great_lakes" onclick="runLane('great_lakes')">▶ Run Great Lakes</button>
+      <button class="btn btn-violet" id="run-southwest" onclick="runLane('southwest')">▶ Run Southwest</button>
+      <span style="flex:1"></span>
+      <div class="label">Export</div>
+      <a class="btn btn-outline btn-sm" href="/export/cgi.xlsx" download>CGI .xlsx</a>
+      <a class="btn btn-outline btn-sm" href="/export/twelvelabs.csv" download>TwelveLabs .csv</a>
+      <a class="btn btn-outline btn-sm" href="/export/twelvelabs.json" download>.json</a>
+    </div>
+  </div>
+</section>
+
+<section class="matrix-section">
+  <div class="wrap">
+    <div class="matrix-head">
+      <h2>Scene × Region Matrix</h2>
+      <div class="legend">
+        <span><i class="dot" style="background:var(--dcp-green)"></i>auto-accept</span>
+        <span><i class="dot" style="background:var(--dcp-sky)"></i>needs approve</span>
+        <span><i class="dot" style="background:var(--dcp-ember)"></i>blocked</span>
+      </div>
+    </div>
+    <div class="matrix" id="matrix"></div>
+  </div>
+</section>
+
+<div class="overlay" id="overlay" onclick="if(event.target===this)closeModal()"><div class="modal" id="modal"></div></div>
+
+<footer><div class="wrap foot-inner">
+  <div class="dcp-logo"><div class="dcp-logo-mark">DCP</div><div class="dcp-logo-wordmark">Doner<br>Colle<br>Partners.</div></div>
+  <div class="foot-copy">&copy; 2026 DonerColle Partners. Brand Gravity production pipeline.</div>
+</div></footer>
+
+<script>
+const LANES=[{key:'great_lakes',label:'Great Lakes'},{key:'southwest',label:'Southwest'}];
+const CELL_TYPES=['existing_running_footage','stock','regionalized_running_w_cgi_ai','regionalized_ai_scenes'];
+const DIAL_DEFS=[
+ {key:'regional_specificity',name:'Regional specificity',star:true},
+ {key:'styling_carry_over',name:'Styling carry-over'},
+ {key:'voice_adherence',name:'Voice adherence'},
+ {key:'narrative_continuity',name:'Narrative continuity'}];
+let PROJECT=null;
+let REC={recommendations:{},tool_label:{}};
+const results={great_lakes:{},southwest:{}};
+let MODAL_CTX=null;
+const recOf=ct=>REC.recommendations[ct]||{};
+const toolLabel=t=>REC.tool_label[t]||t;
+function outputRole(ct,type){const r=recOf(ct);if(type==='super_text')return 'super';if(type==='gap_signal')return 'flag';if(type===r.primary_output)return 'primary';if((r.supporting||[]).includes(type))return 'supporting';return 'other';}
+const ROLE_RANK={primary:0,super:1,supporting:2,flag:3,other:4};
+function recLineHtml(ct){const r=recOf(ct);if(!r.headline)return '';
+  return `<span class="rec-tool ${r.tool}">${toolLabel(r.tool)}</span><span class="rec-headline">${esc(r.headline)}</span>${r.preferred?'<span class="rec-primary">primary</span>':''}`;}
+const esc=s=>(s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+function dialValues(){const o={};DIAL_DEFS.forEach(d=>o[d.key]=parseFloat(document.getElementById('d-'+d.key).value));return o;}
+function renderDials(){
+  const dv=PROJECT.dials;
+  document.getElementById('dials').innerHTML=DIAL_DEFS.map(d=>`
+   <div><div class="dial-name"><span>${d.name}${d.star?' <span class="star">live</span>':''}</span><span class="v" id="dv-${d.key}">${dv[d.key].toFixed(2)}</span></div>
+   <input type="range" id="d-${d.key}" min="0" max="1" step="0.05" value="${dv[d.key]}"
+     oninput="document.getElementById('dv-${d.key}').textContent=parseFloat(this.value).toFixed(2);this.style.setProperty('--p',(this.value*100)+'%')"></div>`).join('');
+  DIAL_DEFS.forEach(d=>{const i=document.getElementById('d-'+d.key);i.style.setProperty('--p',(dv[d.key]*100)+'%');});
+}
+
+function setRunEnabled(on){LANES.forEach(l=>{const b=document.getElementById('run-'+l.key);if(b)b.disabled=!on;});}
+
+function renderMatrix(){
+  const m=document.getElementById('matrix');
+  if(!PROJECT.script.scenes.length){
+    m.style.display='block';
+    m.innerHTML=`<div class="empty-state"><div class="es-big">No matrix yet</div>
+      <div class="es-sub">Upload a .pdf or .pptx storyboard above to extract the scene matrix — or click <b>Load sample</b>.</div></div>`;
+    setRunEnabled(false);
+    return;
+  }
+  m.style.display='grid';
+  setRunEnabled(true);
+  let h=`<div class="col-head scene-col">Scene &amp; technique (editable)</div>`;
+  LANES.forEach(l=>h+=`<div class="col-head">${l.label}</div>`);
+  PROJECT.script.scenes.forEach(s=>{
+    h+=`<div class="scene-cell">
+      <div class="scene-row1"><span class="scene-idx">${s.scene_index}</span>
+        <select onchange="saveScene(${s.scene_index},{cell_type:this.value});document.getElementById('rec-${s.scene_index}').innerHTML=recLineHtml(this.value)">
+          ${CELL_TYPES.map(ct=>`<option value="${ct}" ${ct===s.cell_type?'selected':''}>${ct.replace(/_/g,' ')}</option>`).join('')}
+        </select></div>
+      <div class="rec-line" id="rec-${s.scene_index}">${recLineHtml(s.cell_type)}</div>
+      <label>Scene description</label>
+      <textarea class="fld" onchange="saveScene(${s.scene_index},{scene_description:this.value})">${esc(s.scene_description)}</textarea>
+      <label>Super (on-screen copy)</label>
+      <input class="fld" value="${esc(s.super_intent||'')}" placeholder="(none)"
+        onchange="saveScene(${s.scene_index},{super_intent:this.value,super_called:!!this.value})">
+      <label>Trim / SKU</label>
+      <input class="fld" value="${esc(s.trim_intent||'')}" placeholder="e.g. D28H91"
+        onchange="saveScene(${s.scene_index},{trim_intent:this.value})">
+    </div>`;
+    LANES.forEach(l=>h+=`<div class="lane-cell empty" id="cell-${l.key}-${s.scene_index}">—</div>`);
+  });
+  m.innerHTML=h;
+  // repaint any existing results
+  LANES.forEach(l=>Object.keys(results[l.key]).forEach(i=>renderCell(l.key,parseInt(i))));
+}
+
+async function saveScene(idx,patch){
+  try{ await fetch('/project/scenes/'+idx,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(patch)});
+    const p=PROJECT.script.scenes.find(s=>s.scene_index===idx); if(p)Object.assign(p,patch);
+  }catch(e){alert('Save failed: '+e.message);}
+}
+
+async function loadSample(){
+  const st=document.getElementById('ingest-status'); st.textContent='Loading sample…';
+  try{
+    PROJECT=await(await fetch('/project/sample',{method:'POST'})).json();
+    for(const l of LANES)results[l.key]={};
+    renderDials(); renderMatrix();
+    st.textContent='✓ Sample loaded ('+PROJECT.script.scenes.length+' scenes) — bundled South:15.';
+  }catch(e){st.textContent='';alert('Could not load sample: '+e.message);}
+}
+
+async function upload(f){
+  if(!f)return;
+  const st=document.getElementById('ingest-status'); st.textContent='Extracting "'+f.name+'"…';
+  document.getElementById('dz-main').textContent=f.name;
+  const fd=new FormData(); fd.append('file',f);
+  try{
+    const res=await fetch('/ingest',{method:'POST',body:fd});
+    if(!res.ok){throw new Error((await res.json()).detail||res.statusText);}
+    PROJECT=await res.json();
+    for(const l of LANES)results[l.key]={};
+    renderDials(); renderMatrix();
+    st.textContent='✓ '+PROJECT.script.scenes.length+' scenes extracted — confirm the techniques, then run.';
+  }catch(e){st.textContent=''; alert('Ingest failed: '+e.message);}
+}
+
+function chipFor(o,ct){
+  const role=outputRole(ct,o.type);
+  let inner;
+  if(o.type==='substance_row'){const h=o.row['Color Preference (HEX)']||o.row.color_preference_hex||'#000';
+    inner=`<span class="sw" style="background:${esc(h)}"></span>Substance ${esc(h)}`;}
+  else inner=o.type.replace(/_/g,' ').replace('twelvelabs','TwelveLabs');
+  return `<span class="chip ${role}">${role==='supporting'?'support· ':''}${inner}</span>`;
+}
+function renderCell(lane,idx){
+  const cell=document.getElementById(`cell-${lane}-${idx}`); if(!cell)return;
+  const r=results[lane][idx]; if(!r)return;
+  const ct=r.envelope.cell_type, rc=recOf(ct);
+  const status=r.record.approved?'approved':r.record.review_status;
+  const label=r.record.approved?'approved':r.record.review_status.replace('_',' ');
+  const ordered=[...r.envelope.outputs].sort((a,b)=>ROLE_RANK[outputRole(ct,a.type)]-ROLE_RANK[outputRole(ct,b.type)]);
+  const tool=rc.tool?`<span class="rec-tool ${rc.tool}">${toolLabel(rc.tool)}</span>`:'';
+  const fl=(r.envelope.gaps_flagged||[]).length?`<div class="cell-flags">⚠ ${r.envelope.gaps_flagged.length} flag(s)</div>`:'';
+  cell.className='lane-cell clickable';
+  cell.innerHTML=`<div class="cell-top">${tool}<span class="badge ${status}">${label}</span></div>
+    <div class="chips">${ordered.map(o=>chipFor(o,ct)).join('')}</div>${fl}`;
+  cell.onclick=()=>openModal(lane,idx);
+}
+
+async function runLane(lane){
+  if(!PROJECT)return;
+  for(const l of LANES)document.getElementById('run-'+l.key).disabled=true;
+  let prior=null;
+  try{
+    for(const s of PROJECT.script.scenes){
+      const cell=document.getElementById(`cell-${lane}-${s.scene_index}`);
+      cell.className='lane-cell running';
+      cell.innerHTML=`<div class="cell-top"><div class="spinner"></div><span class="running-label">directing…</span></div>`;
+      const res=await fetch('/run/cell',{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({lane,scene_index:s.scene_index,dials:dialValues(),prior_cell_resolved:prior})});
+      if(!res.ok){throw new Error('scene '+s.scene_index+': '+(await res.text()));}
+      const data=await res.json();
+      results[lane][s.scene_index]=data; prior=data.envelope; renderCell(lane,s.scene_index);
+    }
+  }catch(e){alert('Run stopped: '+e.message);}
+  finally{for(const l of LANES)document.getElementById('run-'+l.key).disabled=false;}
+}
+
+/* ---- review + EDIT modal ---- */
+function field(label,id,val,ta){return `<div class="f-wrap"><label>${label}</label>${ta?`<textarea class="fld" id="${id}">${esc(val)}</textarea>`:`<input class="fld" id="${id}" value="${esc(val)}">`}</div>`;}
+function confSel(id,val){return `<select id="${id}">${['high','medium','low'].map(c=>`<option ${c===val?'selected':''}>${c}</option>`).join('')}</select>`;}
+
+function renderOutputEdit(o,i){
+  let body='';
+  if(o.type==='substance_row'){const r=o.row,g=k=>r[k[0]]??r[k[1]];
+    const hex=g(['Color Preference (HEX)','color_preference_hex'])||'#000000';
+    body=`<div class="grid2">
+      ${field('Nameplate','o'+i+'-nameplate',g(['Nameplate','nameplate']))}
+      ${field('Specific Trim Request','o'+i+'-trim',g(['Specific Trim Request','specific_trim_request']))}
+      ${field('Location Variant','o'+i+'-loc',g(['Location Variant','location_variant']))}
+      <div class="f-wrap"><label>Color (HEX)</label><div class="hexrow"><input type="color" id="o${i}-hexc" value="${esc(hex)}" oninput="document.getElementById('o${i}-hex').value=this.value"><input class="fld" id="o${i}-hex" value="${esc(hex)}"></div></div>
+      ${field('Camera Angles','o'+i+'-cam',g(['Camera Angles','camera_angles']))}
+    </div>${field('AI Image Generator Prompt','o'+i+'-aiprompt',g(['AI Image Generator Prompt','ai_image_generator_prompt']),true)}
+    ${field('Director notes','o'+i+'-notes',o.director_notes||'',true)}`;
+  }else if(o.type==='super_text'){
+    body=field('Super copy','o'+i+'-content',o.content,true)+field('Voice tags (comma)','o'+i+'-tags',(o.voice_tags||[]).join(', '))+field('Legal disclaimers (comma)','o'+i+'-disc',(o.legal_disclaimers||[]).join(', '));
+  }else if(o.type==='twelvelabs_query'){
+    body=field('Natural-language query (keep short / broad)','o'+i+'-nl',o.query.natural_language,true)+field('Tags (comma)','o'+i+'-tags',(o.query.tags||[]).join(', '))+`<div class="grid2">${field('Duration min','o'+i+'-dmin',o.query.duration_min??'')}${field('Duration max','o'+i+'-dmax',o.query.duration_max??'')}</div>`;
+  }else if(o.type==='cg_env_prompt'){
+    body=field('For pipeline','o'+i+'-pipe',o.for_pipeline)+field('Environment prompt (rich / specific)','o'+i+'-prompt',o.prompt,true);
+  }else if(o.type==='stock_search'){
+    body=field('Description (keep short / broad)','o'+i+'-desc',o.natural_language_description,true)+field('Tags (comma)','o'+i+'-tags',(o.tags_for_indexed_search||[]).join(', '));
+  }else if(o.type==='gap_signal'){
+    body=field('Reason','o'+i+'-reason',o.reason,true)+`<div class="grid2">${field('Lane','o'+i+'-lane',o.lane)}${field('Shot type','o'+i+'-shot',o.shot_type||'')}</div>`;
+  }
+  return `<div class="out-block" data-type="${o.type}" data-i="${i}">
+    <div class="out-block-head"><span class="out-type">${o.type.replace(/_/g,' ')}</span>
+      <div class="f-wrap" style="min-width:120px"><label>Confidence</label>${confSel('o'+i+'-conf',o.confidence)}</div></div>${body}</div>`;
+}
+
+function openModal(lane,idx){
+  const r=results[lane][idx]; MODAL_CTX={lane,idx,cell_id:r.record.cell_id};
+  const env=r.envelope,rec=r.record,laneLabel=LANES.find(l=>l.key===lane).label;
+  const ct=env.cell_type, rc=recOf(ct);
+  const status=rec.approved?'approved':rec.review_status;
+  const banner=rc.headline?`<div class="rec-banner"><span class="rb-head">Recommending</span><span class="rb-text">${esc(rc.headline)}</span><span class="rec-tool ${rc.tool}">${toolLabel(rc.tool)}</span>${rc.preferred?'<span class="rec-primary">primary</span>':''}</div>`:'';
+  const prov=(env.provenance||[]).length?`<div class="prov"><b>Reviewing against — directed from:</b><br>${env.provenance.map(p=>`${esc(p.bucket)} <span class="pv">(${esc(p.scope_resolved)} · ${esc(p.confidence)})</span>`).join(' &nbsp;·&nbsp; ')}</div>`:'';
+  const flags=(env.gaps_flagged||[]).length?`<div class="modal-flags"><b>Flags:</b><br>${env.gaps_flagged.map(esc).join('<br>')}</div>`:'';
+  const approveBtn=rec.approved?`<span class="badge approved">approved</span>`:`<button class="btn btn-primary btn-sm" onclick="approve()">Approve</button>`;
+  // Order: primary, super, then supporting (with a divider label).
+  const ordered=env.outputs.map((o,origI)=>({o,origI})).sort((a,b)=>ROLE_RANK[outputRole(ct,a.o.type)]-ROLE_RANK[outputRole(ct,b.o.type)]);
+  let outHtml='',supLabelShown=false;
+  ordered.forEach(({o,origI})=>{
+    if(outputRole(ct,o.type)==='supporting'&&!supLabelShown){outHtml+=`<div class="sec-label">Supporting input · secondary (base plate to source)</div>`;supLabelShown=true;}
+    outHtml+=renderOutputEdit(o,origI);
+  });
+  document.getElementById('modal').innerHTML=`
+    <div class="modal-head"><div><h3>${env.cell_type.replace(/_/g,' ')}</h3>
+      <div class="modal-sub">${laneLabel} · scene ${idx} · ${esc(rec.cell_id)}</div></div>
+      <button class="close-x" onclick="closeModal()">&times;</button></div>
+    ${banner}${prov}${flags}
+    ${outHtml}
+    <div class="modal-foot"><span class="badge ${status}" id="modal-badge">${status.replace('_',' ')}</span>
+      <div style="display:flex;gap:10px"><button class="btn btn-violet btn-sm" onclick="saveEdits()">Save edits</button>${approveBtn}</div></div>`;
+  document.getElementById('overlay').classList.add('open');
+}
+function closeModal(){document.getElementById('overlay').classList.remove('open');}
+const val=id=>{const e=document.getElementById(id);return e?e.value:'';};
+const list=id=>val(id).split(',').map(s=>s.trim()).filter(Boolean);
+const num=id=>{const v=val(id);return v===''?null:parseFloat(v);};
+
+function collectOutputs(){
+  return [...document.querySelectorAll('.out-block')].map(b=>{
+    const t=b.dataset.type,i=b.dataset.i,conf=val('o'+i+'-conf');
+    if(t==='substance_row')return {type:t,confidence:conf,director_notes:val('o'+i+'-notes')||null,row:{
+      'Nameplate':val('o'+i+'-nameplate'),'Specific Trim Request':val('o'+i+'-trim'),'Location Variant':val('o'+i+'-loc'),
+      'Color Preference (HEX)':val('o'+i+'-hex'),'Camera Angles':val('o'+i+'-cam'),'AI Image Generator Prompt':val('o'+i+'-aiprompt')}};
+    if(t==='super_text')return {type:t,confidence:conf,content:val('o'+i+'-content'),voice_tags:list('o'+i+'-tags'),legal_disclaimers:list('o'+i+'-disc')};
+    if(t==='twelvelabs_query')return {type:t,confidence:conf,query:{tags:list('o'+i+'-tags'),natural_language:val('o'+i+'-nl'),duration_min:num('o'+i+'-dmin'),duration_max:num('o'+i+'-dmax')}};
+    if(t==='cg_env_prompt')return {type:t,confidence:conf,for_pipeline:val('o'+i+'-pipe'),prompt:val('o'+i+'-prompt')};
+    if(t==='stock_search')return {type:t,confidence:conf,natural_language_description:val('o'+i+'-desc'),tags_for_indexed_search:list('o'+i+'-tags')};
+    if(t==='gap_signal')return {type:t,confidence:conf,reason:val('o'+i+'-reason'),lane:val('o'+i+'-lane'),shot_type:val('o'+i+'-shot')||null};
+  });
+}
+async function saveEdits(){
+  const {lane,idx,cell_id}=MODAL_CTX;
+  try{
+    const res=await fetch('/drafts/'+encodeURIComponent(cell_id),{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({outputs:collectOutputs()})});
+    if(!res.ok)throw new Error(await res.text());
+    const rec=await res.json(); results[lane][idx].record=rec; results[lane][idx].envelope=rec.envelope;
+    renderCell(lane,idx); openModal(lane,idx);
+  }catch(e){alert('Save failed: '+e.message);}
+}
+async function approve(){
+  const {lane,idx,cell_id}=MODAL_CTX;
+  const res=await fetch('/drafts/'+encodeURIComponent(cell_id)+'/approve',{method:'POST'});
+  if(res.ok){results[lane][idx].record=await res.json();renderCell(lane,idx);openModal(lane,idx);}
+}
+
+['dragover','dragenter'].forEach(ev=>document.getElementById('dropzone').addEventListener(ev,e=>{e.preventDefault();document.getElementById('dropzone').classList.add('drag');}));
+['dragleave','drop'].forEach(ev=>document.getElementById('dropzone').addEventListener(ev,e=>{e.preventDefault();document.getElementById('dropzone').classList.remove('drag');}));
+document.getElementById('dropzone').addEventListener('drop',e=>{if(e.dataTransfer.files[0])upload(e.dataTransfer.files[0]);});
+
+(async function init(){
+  REC=await(await fetch('/recommendations')).json();
+  PROJECT=await(await fetch('/project')).json();
+  renderDials(); renderMatrix();
+})();
+</script>
+</body>
+</html>
