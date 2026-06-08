@@ -1,0 +1,45 @@
+{
+  "bucket": "audience_resonance",
+  "scope": "brand",
+  "brand": "ram",
+  "lane": null,
+  "confidence": "high",
+  "provenance": ["MRI maker and outdoors index", "SATS ID graph deterministic (national)"],
+  "notes_for_consumers": "Brand baseline cue layer; resolves when a lane is not authored. The RAM owner is an established American homeowner with land, equity, and active outdoor and project habits; the default cue layer ignores region and uses national deterministic signal only. Settings-and-objects only; no casting (no people in any cell output). The audience here is Proud Workhorses, the current core.",
+  "content": {
+    "audience": "Proud Workhorses (current core)",
+    "lane_note": "National baseline. Established American homeowner with land, equity, active outdoor and project habits.",
+    "settings": [
+      {"cue": "Workshop, garage, pole barn, outbuilding", "confidence": "high"},
+      {"cue": "Two-lane rural and county road", "confidence": "high"},
+      {"cue": "Lumberyard, home-improvement retail (Home Depot, Lowe's), feed and farm-supply store", "confidence": "high"},
+      {"cue": "Boat launch, lake or river access", "confidence": "high"},
+      {"cue": "Job site (construction, trades)", "confidence": "medium"},
+      {"cue": "Hunting camp, deer lease, duck blind setting", "confidence": "medium"}
+    ],
+    "objects": [
+      {"cue": "Riding mower, John Deere or comparable brand", "confidence": "high"},
+      {"cue": "Boat trailer", "confidence": "high"},
+      {"cue": "ATV, UTV, side-by-side", "confidence": "high"},
+      {"cue": "Motorcycle", "confidence": "high"},
+      {"cue": "Outboard motor, fishing gear (rods, tackle, cooler)", "confidence": "high"},
+      {"cue": "Hunting equipment (rifle case, decoys, blind bag, orange vest in fall)", "confidence": "high"},
+      {"cue": "Workshop tools: radial arm saw, drill press, welding rig, generator", "confidence": "high"},
+      {"cue": "Firewood, lumber, building materials in the bed", "confidence": "medium"},
+      {"cue": "Utility trailer, equipment trailer, livestock trailer", "confidence": "medium"},
+      {"cue": "Coolers, camping gear, fishing tackle", "confidence": "high"},
+      {"cue": "Working dogs (in frame as cargo, not as casting)", "confidence": "medium"}
+    ],
+    "signifiers": [
+      {"cue": "American flag (porch, garage, antenna)", "confidence": "medium"},
+      {"cue": "Visible work attire (Carhartt, hi-vis, steel-toed boots, work gloves) staged near the truck", "confidence": "medium"},
+      {"cue": "Trailer hitch in use, tow setup engaged", "confidence": "high"},
+      {"cue": "Mud, dust, dirt on the truck as truthful evidence of use (not styling)", "confidence": "medium"}
+    ],
+    "excluded_by_relevance_test": [
+      "Specific wood species for smoking", "Beverage choices, food specifics",
+      "Adjective layer ('golden hour', 'dirty by noon')", "Sweet tea, beer brand, sports team gear",
+      "Music or radio specifics"
+    ]
+  }
+}

@@ -1,0 +1,33 @@
+[project]
+name = "instrument-stellantis-director"
+version = "0.1.0"
+description = "Production pipeline agent: script + dials in, cell output envelopes out, via Brand Gravity + a Claude director."
+requires-python = ">=3.9"
+dependencies = [
+    "anthropic>=0.40",
+    "fastapi>=0.110",
+    "uvicorn>=0.29",
+    "pydantic>=2.6",
+    "pydantic-settings>=2.2",
+    "openpyxl>=3.1",
+    "httpx>=0.27",
+    "python-dotenv>=1.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "ruff>=0.4"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py39"

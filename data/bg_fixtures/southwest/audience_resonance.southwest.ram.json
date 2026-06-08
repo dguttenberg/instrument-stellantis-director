@@ -1,0 +1,44 @@
+{
+  "bucket": "audience_resonance",
+  "scope": "lane",
+  "brand": "ram",
+  "lane": "southwest",
+  "confidence": "high",
+  "provenance": ["MRI maker and outdoors index", "SATS ID graph deterministic", "founding-population finding"],
+  "notes_for_consumers": "Feeds environment prompts and footage queries. Pick settings, objects, and signifiers from the resolved block; lane content is additive on the baseline. Settings-and-objects only; sensory mood lives in creative_intent. The 'no people in frame' rule is honored absolutely — multigenerational and gathering evidence is rendered through objects (multiple coolers, multiple chairs, table set up), never bodies. The audience here is Proud Workhorses, the current core.",
+  "content": {
+    "audience": "Proud Workhorses (current core)",
+    "lane_note": "Similar income range to Great Lakes (8th-9th decile in Phoenix metro and Hill Country, more variable in Rio Grande Valley). Multigenerational household composition is high; Mexican-heritage population is the founding population in much of the BC. Maker and outdoor culture present but reorganized around heat: early-morning timing, carport-not-garage, summer as the season that defines life rhythm.",
+    "settings": [
+      {"cue": "Carport (not garage), open-air, often metal-roofed, shading the truck at midday", "confidence": "high"},
+      {"cue": "Adobe or stucco home, single-story, earth-toned", "confidence": "high"},
+      {"cue": "Open desert two-lane (mesquite, creosote, saguaro depending on sub-region)", "confidence": "high"},
+      {"cue": "Hill Country ranch with live oak and cedar", "confidence": "medium"},
+      {"cue": "Border-town main street with bilingual signage", "confidence": "medium"},
+      {"cue": "Lake recreation (Travis, Powell, Mead) with boat in tow, often pre-dawn departure", "confidence": "high"},
+      {"cue": "Ranch property with livestock, horse trailer setup", "confidence": "medium"},
+      {"cue": "Rodeo grounds, fairgrounds, county fair", "confidence": "medium"},
+      {"cue": "High school football stadium and parking lot in fall", "confidence": "medium"},
+      {"cue": "Construction site, often early-morning to avoid heat", "confidence": "high"},
+      {"cue": "Tractor Supply, feed store, farm-supply parking", "confidence": "high"}
+    ],
+    "objects": [
+      {"cue": "Bilingual signage in the frame (storefront, road sign, billboard)", "confidence": "medium"},
+      {"cue": "Horse trailer, livestock trailer", "confidence": "medium"},
+      {"cue": "Coolers staged for pre-dawn lake or hunting departure", "confidence": "high"},
+      {"cue": "Hunting gear specific to regional game: white-tail (TX), elk (NM), dove (AZ in September)", "confidence": "medium"},
+      {"cue": "ATV / UTV with desert configuration (sand tires, brush guards)", "confidence": "high"},
+      {"cue": "Truck mounted with ranch or construction gear: gooseneck hitch, headache rack, toolbox, ladder rack", "confidence": "medium"},
+      {"cue": "Mountain bikes, kayaks (Hill Country, AZ recreation culture)", "confidence": "medium"},
+      {"cue": "Trailer with grilling and cooking setup for tailgate or family gathering", "confidence": "medium"}
+    ],
+    "signifiers": [
+      {"cue": "Shade pattern across the truck from a carport, palo verde, or live oak", "confidence": "high", "note": "summer cell's most distinguishing visual"},
+      {"cue": "Tow scenario in pre-dawn or post-sunset light", "confidence": "high"},
+      {"cue": "Texas, Arizona, New Mexico plates", "confidence": "medium"},
+      {"cue": "Truck dust-covered from a ranch or desert road", "confidence": "medium"},
+      {"cue": "Multigenerational gathering's evidence around the truck or carport: multiple coolers, multiple chairs, table set up (no people in frame)", "confidence": "medium"},
+      {"cue": "Mountain ridgeline visible at distance from most metros", "confidence": "medium"}
+    ]
+  }
+}

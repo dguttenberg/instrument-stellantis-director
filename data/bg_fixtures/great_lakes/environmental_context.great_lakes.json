@@ -1,0 +1,48 @@
+{
+  "bucket": "environmental_context",
+  "scope": "lane",
+  "brand": null,
+  "lane": "great_lakes",
+  "confidence": "high",
+  "provenance": ["NOAA normals (qualitative)", "deep research"],
+  "notes_for_consumers": "Feeds environment prompts and footage queries. Pick season-correct content for the cell's retail-calendar moment; the Year-End demo pulls winter. The GL-vs-SW contrast on the Q4 winter cell is the demo's most legible customization moment. Low-confidence sensory mood (light/palette adjectives) is creative reference, not to be encoded verbatim; the high-confidence climate-and-landscape content is the operative layer.",
+  "content": {
+    "lane_label": "Great Lakes",
+    "seasons": {
+      "winter": {
+        "season_focus": "winter",
+        "retail_moment": "Big Finish (Dec), Black Friday (Nov), Start Something New (Jan)",
+        "weather": "sustained below freezing, lake-effect snow, snow on ground most of the season",
+        "light": "flat, low-angle, gray, short days, long blue hour",
+        "landscape": "bare deciduous, dark evergreens, salted roads, plowed snowbanks; ranch houses, pole barns",
+        "activity_rhythm": "garage time, indoor projects, snowmobile season; trucks plow, haul firewood, carry salt",
+        "palette_hints": ["snow whites", "gray sky", "salted asphalt", "dark evergreen"],
+        "cgi_footage_implication": "The winter cell with the strongest seasonal visual; the snow-and-gray palette is the GL signature."
+      },
+      "spring": {
+        "season_focus": "spring",
+        "retail_moment": "Declaration of Deals (Mar–Apr), 4x4 Day, Truck Month",
+        "weather": "thaw, mud season, late-snow events possible, daytime 40s–60s",
+        "light": "lengthening days, harsh midday, golden return",
+        "landscape": "bare branch leafing, mud, last snow patches, lakes opening",
+        "activity_rhythm": "boats out of storage, mud season for off-road, garages reopen to outdoor work"
+      },
+      "summer": {
+        "season_focus": "summer",
+        "retail_moment": "Make This The Summer Event, Summer of Jeep",
+        "weather": "warm, humid in lower-elevation areas, thunderstorm afternoons",
+        "light": "long days, golden evening, blue hour stretches late",
+        "landscape": "full deciduous canopy, lake activity, cottage culture, county fairs",
+        "activity_rhythm": "boat-launch concentration weekends, fishing and hunting prep, construction season peak"
+      },
+      "fall": {
+        "season_focus": "fall",
+        "retail_moment": "Drive into Fall → Black Friday",
+        "weather": "cooling fast, leaf turn Sept–Oct, first frost by mid-October, first snow late Oct in north",
+        "light": "shorter days, warmer color palette, late golden hour",
+        "landscape": "leaf color (red, orange, yellow, brown), bare branches in late fall, harvest signage",
+        "activity_rhythm": "deer opener, harvest, football culture, winter prep (firewood, plows mounted, boat into storage)"
+      }
+    }
+  }
+}

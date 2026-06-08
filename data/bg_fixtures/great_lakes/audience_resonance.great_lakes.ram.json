@@ -1,0 +1,41 @@
+{
+  "bucket": "audience_resonance",
+  "scope": "lane",
+  "brand": "ram",
+  "lane": "great_lakes",
+  "confidence": "high",
+  "provenance": ["MRI maker and outdoors index", "SATS ID graph deterministic"],
+  "notes_for_consumers": "Feeds environment prompts and footage queries. Pick settings, objects, and signifiers from the resolved block; lane content is additive on the baseline. Confidence flags drive draft-system review priority. Settings-and-objects only; sensory mood lives in creative_intent. The 'no people in frame' rule is honored absolutely — multigenerational/gathering evidence is rendered through objects (chairs, coolers, table), never bodies. The audience here is Proud Workhorses, the current core.",
+  "content": {
+    "audience": "Proud Workhorses (current core)",
+    "lane_note": "Upper end of income for the BC (8th–9th decile, established homeowner with land, often a workshop or pole barn). Maker culture and outdoor recreation deeply present; watercraft and snow-season equipment add a layer absent in lower-latitude BCs.",
+    "settings": [
+      {"cue": "Pole barn on rural acreage", "confidence": "high"},
+      {"cue": "Lake launch parking lot in season (May–Oct), boat in storage off-season", "confidence": "high"},
+      {"cue": "Snowmobile trail access, sledding lot", "confidence": "high"},
+      {"cue": "Hunting camp, deer lease in upper Michigan and Wisconsin", "confidence": "high"},
+      {"cue": "Two-lane through bare deciduous and dark evergreen in winter, lake-effect snowbanks", "confidence": "high"},
+      {"cue": "Feed-store and Tractor Supply parking lot, rural", "confidence": "high"},
+      {"cue": "Workshop with woodworking and metalworking setup", "confidence": "high"},
+      {"cue": "Lakeside cottage or cabin, modest, year-round-use", "confidence": "medium"}
+    ],
+    "objects": [
+      {"cue": "Boat trailer with fishing boat or pontoon in summer, wrapped or tarped in winter", "confidence": "high"},
+      {"cue": "Snowmobile, snowmobile trailer", "confidence": "high"},
+      {"cue": "Plow attachment on the truck or in the workshop", "confidence": "high"},
+      {"cue": "Ice-fishing gear: auger, tip-ups, shanty, sled", "confidence": "high"},
+      {"cue": "Firewood pile, stacked under tarp or in lean-to", "confidence": "high"},
+      {"cue": "John Deere riding mower or compact tractor", "confidence": "high"},
+      {"cue": "Bait shop signage, tackle, leeches and minnow buckets in season", "confidence": "medium"},
+      {"cue": "Salt-streaked truck bed and side panels in winter", "confidence": "medium"},
+      {"cue": "Hunting orange in fall, decoys for duck and goose", "confidence": "medium"}
+    ],
+    "signifiers": [
+      {"cue": "Snow on truck, fresh tracks across a snow-covered driveway", "confidence": "high", "note": "winter cell's most distinguishing visual"},
+      {"cue": "Tow scenario engaged: boat in summer, snowmobile or ice-fishing shanty in winter, utility trailer year-round", "confidence": "high"},
+      {"cue": "Michigan, Wisconsin, Minnesota, Ohio plates", "confidence": "medium"},
+      {"cue": "Plow-attachment-mounted truck plowing the driveway", "confidence": "medium"},
+      {"cue": "Cabin window or barn door open into the workshop in cold weather, light from inside", "confidence": "medium"}
+    ]
+  }
+}

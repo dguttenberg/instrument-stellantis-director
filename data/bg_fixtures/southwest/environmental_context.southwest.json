@@ -1,0 +1,48 @@
+{
+  "bucket": "environmental_context",
+  "scope": "lane",
+  "brand": null,
+  "lane": "southwest",
+  "confidence": "high",
+  "provenance": ["NOAA normals (qualitative)", "deep research"],
+  "notes_for_consumers": "Feeds environment prompts and footage queries. Pick season-correct content for the cell's retail-calendar moment; the Year-End demo pulls winter. Southwest winter is WARM-light winter, not cold; the brief's snow-footage reels do NOT apply to this lane. This is the lane where the GL-vs-SW Q4 customization reads loudest. Low-confidence sensory mood (light/palette adjectives) is creative reference; the high-confidence climate-and-landscape content is the operative layer.",
+  "content": {
+    "lane_label": "Southwest",
+    "seasons": {
+      "winter": {
+        "season_focus": "winter",
+        "retail_moment": "Big Finish (Dec), Black Friday (Nov), Start Something New (Jan)",
+        "weather": "mild and dry across most of the BC; Phoenix lows in 40s, daytime 60s-70s; Hill Country and Albuquerque colder with overnight freezes; Big Bend and panhandle see real cold but no sustained snow; RGV stays warm. Snow is the exception, confined to higher elevations (Flagstaff, Ruidoso, Sandia).",
+        "light": "sharp, clear, low-angle; sun stays bright; long shadows midday; blue sky most days",
+        "landscape": "desert vegetation (saguaro AZ, mesquite and live oak TX, juniper NM); stucco and adobe; wide roads; strip-anchored retail; mountains visible from most metros",
+        "activity_rhythm": "outdoor work and recreation resume rather than pause; hunting season TX (white-tail) and NM; mild enough for active outdoor truck use; holiday lights against bare-branch oaks and palms",
+        "palette_hints": ["stucco beige", "desert dust", "mesquite green-gold", "clear sky blue", "red rock"],
+        "cgi_footage_implication": "Winter cells are warm-light winter, not cold. The brief's snow footage reels do NOT apply to this lane. This is the lane where GL-vs-SW Q4 customization reads loudest."
+      },
+      "spring": {
+        "season_focus": "spring",
+        "retail_moment": "Declaration of Deals (Mar-Apr), 4x4 Day, Truck Month",
+        "weather": "warm and dry, climbing fast; Phoenix into 90s by May; Hill Country 80s with humid afternoons; NM cooler at altitude; wildflower bloom (bluebonnets TX in April); dust and wind events common",
+        "light": "strong sun, longer days, lengthening shadows; wildflower color reads against beige and red ground",
+        "landscape": "bloom layer over muted ground; mesquite leafing out; mountain snowpack visible at distance through April in NM and Flagstaff; construction season ramping",
+        "activity_rhythm": "outdoor weekend activity at widest range before summer heat enforces early-morning timing; rodeo season TX"
+      },
+      "summer": {
+        "season_focus": "summer",
+        "retail_moment": "Make This The Summer Event, Summer of Jeep",
+        "weather": "defining season. Sustained extreme heat Phoenix (100s, often 110s); high humidity coastal TX; dry heat interior; monsoon season begins late June AZ and NM (afternoon thunderstorms, dust walls, flash floods); triple-digit days set rhythm",
+        "light": "hard, direct, brutal midday; long golden hour at sunset locals know how to use; sunset is an event, not a backdrop",
+        "landscape": "dust haze interior; carports replacing garages (built for shade); pool culture metros; lakes and rivers full (Travis, Powell, Mead); big sky",
+        "activity_rhythm": "day compresses around heat; early morning and after-sundown are when outdoor work and life happen; trucks parked in shade or carport midday; boating concentrated weekends, often overnight or pre-dawn departures"
+      },
+      "fall": {
+        "season_focus": "fall",
+        "retail_moment": "Drive into Fall -> Black Friday",
+        "weather": "heat breaks gradually; October first comfortable month in Phoenix; Hill Country and East TX see real fall by November; NM aspen color in October (Santa Fe, Taos); hurricane season risk along TX coast through October",
+        "light": "clearer than summer, less haze; color where it exists concentrated in aspen and mesquite turn; light softens but stays directional and sharp",
+        "landscape": "football culture takes over the calendar; high school stadiums lit Friday, college Saturday, NFL Sunday; State Fair of Texas in Dallas in October",
+        "activity_rhythm": "outdoor life returns full intensity; hunting season opens (dove September, then deer); bonfires and porch culture return; truck use peaks (hunting, football tailgates, year-end jobsite ramp)"
+      }
+    }
+  }
+}

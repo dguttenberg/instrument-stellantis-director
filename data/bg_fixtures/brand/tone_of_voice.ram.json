@@ -1,0 +1,26 @@
+{
+  "bucket": "tone_of_voice",
+  "scope": "brand",
+  "brand": "ram",
+  "lane": null,
+  "confidence": "high",
+  "provenance": ["RAM Brand Guidelines 2025-26", "Football Brief Apr 2026"],
+  "notes_for_consumers": "Sets the tonal register of supers and any director-written copy. The is/isn't table is the operational filter: every line passes on the left column (Confident, Relentless, Authentic, Bold, Strong-willed) without crossing into the right (Cocky, Reckless, Performative, Boastful, Narrow-minded). When in doubt, the right-column words are the disqualifiers. The raw internal voice is a calibration tool for self-image, NOT permission to write profanely or jokily. The Year-End retail moment leans toward Confident and Bold, away from Relentless and Strong-willed.",
+  "content": {
+    "personality_words": ["EDGY", "BOLD", "REBELLIOUS"],
+    "stance_statement": "Ram doesn't ask permission. We move forward with conviction, unfiltered and unapologetically direct. We push boundaries. We challenge assumptions. We go against the grain even when it's easier to follow. Never passive. Never soft. This is more than tone — it's our stance. It's our steel frame.",
+    "is_isnt_table": [
+      {"we_are": "Confident", "because": "Lead with authority, not to impress others", "we_are_not": "Cocky"},
+      {"we_are": "Relentless", "because": "Push limits with purpose, not just for show", "we_are_not": "Reckless"},
+      {"we_are": "Authentic", "because": "Built for real truck owners, not marketing hype", "we_are_not": "Performative"},
+      {"we_are": "Bold", "because": "Make a statement without empty bravado", "we_are_not": "Boastful"},
+      {"we_are": "Strong-willed", "because": "Stand firm in identity but aren't stuck in the past", "we_are_not": "Narrow-minded"}
+    ],
+    "tone_direction": "Confident (not cocky), bold, loud and aspirational. The disruptor of the full-size pickup category. Edgy, bold, rebellious, unmistakable.",
+    "two_voices": {
+      "polished_guidelines_voice": "What runs in external work. Confident-not-cocky, edgy/bold/rebellious within the is/isn't guardrails.",
+      "raw_internal_voice": "Blunter, more profane internal voice ('LET'S F***ING GO'). Signal for the brand's self-image only; does NOT appear in cell output."
+    },
+    "year_end_modulation": "Leans Confident and Bold, away from Relentless and Strong-willed; sales-event close, not category disruption."
+  }
+}

@@ -1,0 +1,13 @@
+.venv/
+venv/
+__pycache__/
+*.pyc
+.env
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+# local draft store + generated demo outputs
+data/draftstore.sqlite
+out/
+*.xlsx.out.xlsx
+.DS_Store

@@ -1,0 +1,48 @@
+{
+  "bucket": "creative_intent",
+  "scope": "lane",
+  "brand": "ram",
+  "lane": "southwest",
+  "confidence": "medium",
+  "provenance": ["first-pass store doc", "RAM brand pyramid"],
+  "notes_for_consumers": "Sets the creative posture the director carries into every cell of the Year-End retail demo. The brand baseline applies universally. The Year-End block specifies moment-level emphasis (Strength Without Limits, Your Choice Our Power) and the inheritance posture. The lane block describes how the same Year-End posture renders in the Southwest. Compose in order: lane content adds regional specifics to the moment-level emphasis applied through the baseline posture.",
+  "content": {
+    "brand_baseline": {
+      "posture": "vehicle-as-hero, motion-forward, cinematic, capability-led. Every frame advances the spot. No isolated beats. The truck is the protagonist; the environment is the supporting actor.",
+      "principles": [
+        "In-your-face creative matching the intensity of 'Nothing Stops Ram'",
+        "Cinematic register across every cell",
+        "Vehicle-as-hero - truck in frame, in motion, in command",
+        "No people in frame for the Year-End retail demo; audience truth feeds environment and object choice, not casting",
+        "Capability-led - features and capabilities are the through-line; supers carry the claim",
+        "Frame-to-frame continuity - the prior cell's resolution informs the next",
+        "Quality reclamation visible - lead with JD Power VDS on quality-adjacent moments"
+      ]
+    },
+    "year_end_moment": {
+      "framing": "Sales-event creative, not brand-build. Wrap Up The Year Sales Event sits in Q4 downstream of the Football launch (Aug 27) and brand campaign launch (Jan 20). Inherits the established NSR voice rather than building it.",
+      "dial_posture": "High styling_carry_over, high voice_adherence, moderate regional_specificity, moderate-high narrative_continuity.",
+      "emphasis": [
+        "Lead with Strength Without Limits (warranty, dependability) and Your Choice Our Power (HEMI, Cummins)",
+        "Less weight on Built to Dominate and Fearless by Form",
+        "Warmth and celebration register - giving-and-getting holiday close, not category disruption",
+        "Holiday lights, year-end iconography acceptable where script directs"
+      ],
+      "operative_tonal_frame": "'The holidays are all about giving around here / But at the Ram Wrap up the Year Sales event, it's all about getting.'"
+    },
+    "lane": {
+      "register": "warm-and-clear, heat-adapted, carport-and-stucco",
+      "operative_imagery": [
+        "Mild winter light, clear blue sky, sharp shadows",
+        "Bare-but-not-frozen ground, live oak, mesquite, saguaro depending on sub-region",
+        "Carport over the truck (the most distinguishing SW cue)",
+        "Adobe or stucco home backdrop, earth tones",
+        "Mountain ridgeline visible at distance",
+        "Holiday lights against stucco or live oak, not against snow",
+        "Tow scenarios: boat in pre-dawn or post-sunset light, livestock or horse trailer in TX/NM, ATV with desert configuration"
+      ],
+      "color_story": "Warm ground (stucco beige, dust, mesquite green-gold, sky blue). The truck reads as either embedded (earth-tone trims) or contrast (red, blue) against the warm palette. Color choice is intentional against the environment.",
+      "tonal_register": "Same hard-working register as Great Lakes, with the heat-adapted rhythm visible (pre-dawn or golden-hour staging, carport shade, dust on the truck)."
+    }
+  }
+}

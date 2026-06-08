@@ -1,0 +1,62 @@
+{
+  "bucket": "product_catalog",
+  "scope": "brand",
+  "brand": "ram",
+  "lane": null,
+  "confidence": "high",
+  "provenance": ["RAM Brand Intelligence Context", "Substance_Automation-ram_variant_demo", "RFP brief", "Football Brief"],
+  "notes_for_consumers": "Operative product source on every cell. Trim SKUs, hex colors, and camera angles map directly into Substance rows for the CG/AI pipeline cell type. The claims hierarchy is priority order: when a script direction supports multiple claims, lead with the higher-priority claim. JD Power VDS dependability is the deliberate lead claim across 2026. Disclaimer language is verbatim where supplied; fall back to 'See dealer for details' when unsure. Do NOT emphasize the Hurricane I6 cylinder count. Render the mandatory sponsor sign-off exactly when the script directs it.",
+  "content": {
+    "nameplate_hierarchy": {
+      "Ram 1500": "LD volume hero. Trims: Tradesman (base), Big Horn, Laramie, Limited, Longhorn, Tungsten, TRX, RHO, Black Express.",
+      "Ram 2500": "HD. Power Wagon, Power Wagon Diesel (PWD), Laramie, Limited, Black Express.",
+      "Ram 3500": "HD. Laramie, Limited.",
+      "Ram ProMaster": "commercial cargo.",
+      "Ram REV / Ramcharger": "range-extended electric pickup."
+    },
+    "trims": {
+      "D28H91": {"nameplate": "Ram 1500", "trim_label": "Tradesman (Base)", "specific_trim_request": "D28H91 - Tradesman (Base)"},
+      "D28M91": {"nameplate": "Ram 1500", "trim_label": "Limited / Longhorn (DRW)", "specific_trim_request": "D28M91 - Limited / Longhorn (DRW)"},
+      "D28L92": {"nameplate": "Ram 1500", "trim_label": "Big Horn / Laramie", "specific_trim_request": "D28L92 - Big Horn / Laramie"}
+    },
+    "available_hex": ["#B61A22", "#4E5154", "#1A6FB3", "#FFFFFF", "#000000"],
+    "hex_names": {
+      "#B61A22": "Flame Red range",
+      "#4E5154": "charcoal gray",
+      "#1A6FB3": "Hydro Blue range",
+      "#FFFFFF": "Bright White",
+      "#000000": "Diamond Black"
+    },
+    "hex_note": "Demo set, not the complete RAM palette. Production work pulls the current model-year color list from the brand book.",
+    "available_camera_angles": ["action_front_3q", "hero_front", "configurator_front_3q", "front_face_low", "front_TBD"],
+    "camera_angle_notes": {
+      "action_front_3q": "three-quarter front, in motion",
+      "hero_front": "front-on hero shot, static or slow motion",
+      "configurator_front_3q": "three-quarter front, clean (no environment cues)",
+      "front_face_low": "low-angle front (grille emphasis)",
+      "front_TBD": "placeholder for new angle ([NEW] tag in demo set)"
+    },
+    "claims_hierarchy": [
+      {"priority": 1, "claim": "America's Most Dependable Full-Size Truck — J.D. Power.", "source": "2026 U.S. Vehicle Dependability Study, Ram 1500 ranked #1 in large light-duty pickup segment.", "disclaimer": "Based on 33,268 original owners of 2023 MY vehicles after 3 years.", "note": "LEAD claim for any quality-adjacent moment. Football Brief: do NOT minimize this."},
+      {"priority": 2, "claim": "America's Most Powerful Lineup of Full-Size Light-Duty Gas Production Trucks.", "disclaimer": "standard claims-log language."},
+      {"priority": 3, "claim": "America's Best Powertrain Limited Warranty — 10 yr / 100,000 mi.", "source": "2026 model year extension.", "disclaimer": "Powertrain Limited Warranty on 2026 models. Excludes [list]. See Powertrain Limited Warranty for details.", "note": "Must be in creative concepts in some capacity."},
+      {"priority": 4, "claim": "Available HEMI V8.", "note": "HEMI return is the central 'Ramdemption' beat. Lead for any HEMI-focused moment."},
+      {"priority": 5, "claim": "High output 6.7L Cummins Turbo Diesel.", "note": "HD. Best-in-class base diesel torque."},
+      {"priority": 6, "claim": "Coil-link / air rear suspension.", "note": "Brand engineering signature."}
+    ],
+    "legal_disclaimers": [
+      "See dealer for details.",
+      "Vehicle shown with optional equipment.",
+      "Based on 33,268 original owners of 2023 MY vehicles after 3 years.",
+      "Powertrain Limited Warranty on 2026 models. Excludes [list]. See Powertrain Limited Warranty for details."
+    ],
+    "mandatory_sponsor_signoff": "Sponsored by Ram trucks. Nothing Stops Ram.",
+    "hurricane_cylinder_rule": "Do not emphasize the Hurricane I6's six-cylinder count in supers, copy, or descriptive language. Refer to 'Hurricane' or specific output figures (horsepower, torque).",
+    "brand_truths": [
+      "Powertrain breadth — HEMI V8, Cummins Turbo Diesel, Hurricane I6. 'Your Choice, Our Power.'",
+      "Ride and handling — multiple suspension options, coil-link/air rear.",
+      "Luxury interior — incomparable interiors, comfortable ride.",
+      "Diesel and HD leadership — long-standing positioning."
+    ]
+  }
+}

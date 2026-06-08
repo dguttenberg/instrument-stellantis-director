@@ -1,0 +1,21 @@
+{
+  "bucket": "design_tokens",
+  "scope": "brand",
+  "brand": "ram",
+  "lane": null,
+  "confidence": "medium",
+  "provenance": ["RAM brand book"],
+  "notes_for_consumers": "Stub bucket. Use the captured design_tokens values where supers need brand color treatment, but do not depend on this bucket for content. Legal disclaimer language pulls from copy_rules and product_catalog for now.",
+  "content": {
+    "colors": {
+      "Stinger Yellow": "#F2CB05",
+      "Ram Black": "#0E0E0E",
+      "Ram White": "#FFFFFF"
+    },
+    "stinger_yellow_note": "Signature accent; not load-bearing for the Year-End demo per pitch direction.",
+    "typography": {
+      "headline": "Veneer (ALL CAPS, Regular and Regular Italic)",
+      "body": "Barlow"
+    }
+  }
+}

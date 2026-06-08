@@ -1,0 +1,36 @@
+{
+  "bucket": "copy_rules",
+  "scope": "brand",
+  "brand": "ram",
+  "lane": null,
+  "confidence": "high",
+  "provenance": ["RAM Brand Guidelines 2025-26", "RAM Football Brief Apr 2026"],
+  "notes_for_consumers": "Checked on every super and every director-written line. The four hard rules apply absolutely. The claims hierarchy is priority order; lead with the higher-priority claim. JD Power VDS dependability is the lead claim across 2026. Disclaimer language is verbatim where required; fall back to 'See dealer for details' when unsure. Year-End retail does NOT relax the Hurricane cylinder-count rule, the title-case rule, or the sponsor sign-off rule.",
+  "content": {
+    "hard_rules": [
+      {"rule": "Brand name title case", "detail": "Write 'Ram' in all authored text (capital R, lowercase a, lowercase m). Do NOT write 'RAM', 'ram', or 'RAM Trucks' in body text. The all-caps RAM wordmark only appears in logo lockups."},
+      {"rule": "Mandatory sponsor voiceover sign-off", "detail": "When Ram is credited as sponsor or presenter: 'Sponsored by Ram trucks. Nothing Stops Ram.' Must not be reordered, truncated, or altered."},
+      {"rule": "Hurricane cylinder-count rule", "detail": "Do NOT emphasize the Hurricane I6's six-cylinder count. Refer to 'Hurricane' or 'powertrain choice' or specific output figures (horsepower, torque)."},
+      {"rule": "Quality-claim posture", "detail": "Lead with the JD Power 2026 VDS dependability win as the accredited third-party quality proof. Front and center in at least one concept per campaign; do NOT minimize."}
+    ],
+    "claims_hierarchy": [
+      "America's Most Dependable Full-Size Truck — JD Power (2026 VDS, Ram 1500). Lead claim for any quality-adjacent moment.",
+      "America's Most Powerful Lineup of Full-Size Light-Duty Gas Production Trucks.",
+      "America's Best Powertrain Limited Warranty — 10 yr / 100,000 mi (2026 models).",
+      "Available HEMI V8.",
+      "High output 6.7L Cummins Turbo Diesel (HD).",
+      "Best-in-class base diesel torque."
+    ],
+    "disclaimer_language": [
+      "See dealer for details.",
+      "Vehicle shown with optional equipment.",
+      "Based on 33,268 original owners of 2023 MY vehicles after 3 years.",
+      "Powertrain Limited Warranty on 2026 models. Excludes [list]. See Powertrain Limited Warranty for details."
+    ],
+    "tone_modulation_by_moment": {
+      "football_brand_campaign": "Aug–Jan: full NSR voice, manifesto-adjacent, loud.",
+      "year_end_retail": "Q4: NSR voice inherited but dialed for sales-event close. Less manifesto, more product and warranty. Confident over Relentless.",
+      "always_on_retail_map": "Year-round: voice matches the brand campaign in flight; never softer than brand baseline."
+    }
+  }
+}
