@@ -1,0 +1,48 @@
+{
+  "bucket": "environmental_context",
+  "scope": "lane",
+  "brand": null,
+  "lane": "northeast",
+  "confidence": "high",
+  "provenance": ["NOAA normals (qualitative)", "deep research"],
+  "notes_for_consumers": "Feeds environment prompts and footage queries. Northeast is colder and WETTER than Great Lakes (not lake-effect dry) with a denser, older, colonial built environment and a professional/trades-skewed audience. Year-End Q4 sits in the bare-branch / first-snow transition; fall foliage is the signature seasonal visual. Pick season-correct content; the high-confidence climate-and-landscape layer is operative, the low-confidence sensory mood is creative reference.",
+  "content": {
+    "lane_label": "Northeast",
+    "seasons": {
+      "winter": {
+        "season_focus": "winter",
+        "retail_moment": "Big Finish (Dec), Black Friday (Nov), Start Something New (Jan)",
+        "weather": "cold and wet; coastal Maine and northern New England see real winter; mid-Atlantic and coastal MA/CT/RI see mixed precipitation, slush, freezing rain; upstate NY sees lake-effect off Erie/Ontario; marine influence moderates but humidity makes cold cut harder",
+        "light": "short days, low-angle sun, often overcast; coastal salt-marine quality; inland flatter",
+        "landscape": "older built environment (colonial-era town centers, brick-and-clapboard housing, stone walls, narrow rural roads, granite/slate); bare deciduous (maples, oaks, beech); dark conifer in upper NE; salted/brine-treated roads",
+        "activity_rhythm": "trades and construction continue (interior work, snowplow, generator season); hunting upstate NY/PA/ME; ice fishing smaller lakes; coastal oyster/lobster work; holiday hospitality",
+        "palette_hints": ["salt whites", "ice glaze", "brine-gray asphalt", "bare maple and oak", "dark conifer", "colonial brick and clapboard", "granite gray"],
+        "cgi_footage_implication": "Colder and wetter than Great Lakes — more salt streak, more ice-glaze, brine on asphalt; architecture reads colonial-and-dense, not rural-Midwest open."
+      },
+      "spring": {
+        "season_focus": "spring",
+        "retail_moment": "Declaration of Deals (Mar-Apr), 4x4 Day, Truck Month",
+        "weather": "slow thaw; March still cold and wet; April first real warming + rapid tree-leaf emergence; May warms quickly; coastal lags inland by weeks; mud season real rural NE; coastal nor'easters into April",
+        "light": "lengthening fast, late-afternoon golden return; spring color (bright greens, redbud, dogwood, magnolia) against still-bare overstory",
+        "landscape": "stone walls re-emerging from snow; streams running high; maple sugaring in northern NE into March; lawns muddy then greening; boats coming out of storage",
+        "activity_rhythm": "trades season ramps (residential construction, landscaping, marine yards); fishing opens; garden centers surge"
+      },
+      "summer": {
+        "season_focus": "summer",
+        "retail_moment": "Make This The Summer Event, Summer of Jeep",
+        "weather": "warm and humid; coastal marine moderation (Cape, Long Island, Newport, RI shoreline); inland and upstate hot/sticky; afternoon thunderstorms; hurricane risk coast Aug-Oct",
+        "light": "long days, full canopy filtering; late golden hour into evening; coastal luminous; inland sometimes hazy",
+        "landscape": "full deciduous canopy mature; coastal salt marsh, dune, beach grass, harbor; Finger Lakes, Champlain, Berkshires, Adirondacks, White Mountains busy",
+        "activity_rhythm": "construction peak; boating/sailing season; beach recreation; summer-stock theater, fairs, festivals; weekend rural escapes from urban metros"
+      },
+      "fall": {
+        "season_focus": "fall",
+        "retail_moment": "Drive into Fall -> Black Friday",
+        "weather": "cooling fast; leaf-peeping Oct in northern NE (Vermont, NH, Maine), Oct-early Nov in lower NE/mid-Atlantic; first frost mid-Oct in north; November turns gray and cold quickly; nor'easter risk into October",
+        "light": "clear, sharp, warming-color palette; bright peak leaf color (orange, red, yellow, gold) for a 2-3 week window",
+        "landscape": "foliage peak is the dominant visual; pumpkin patches, apple orchards, cider mills, hayrides at peak; late fall bare branches, gray late-Nov",
+        "activity_rhythm": "deer season; NFL Sundays, high school Friday lights, college Saturdays; apple harvest; trades winterizing properties; boats out of water; firewood cut and stacked"
+      }
+    }
+  }
+}

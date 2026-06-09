@@ -1,0 +1,49 @@
+{
+  "bucket": "environmental_context",
+  "scope": "lane",
+  "brand": null,
+  "lane": "west",
+  "confidence": "medium",
+  "provenance": ["NOAA normals (qualitative)", "deep research"],
+  "notes_for_consumers": "Feeds environment prompts and footage queries. West is the most geographically varied BC — sub-regional variance (Pacific Coast, Inland/Mountain West, Great Basin, California) dwarfs every other BC, so a sub-region should be declared before season makes full sense. Use the regional_specificity dial: low = average to a generic 'West' (fog, evergreen, gray); high = sharpen to a named sub-region. Income skews lower than GL/SW (5th-6th decile); most plural BC; fastest visitation decline.",
+  "content": {
+    "lane_label": "West",
+    "subregions": ["Pacific Coast (WA/OR/N. CA)", "Inland NW & Mountain West (E. WA, ID, MT, WY, CO mtns, UT)", "Great Basin (NV, UT west, E. OR)", "California (Central & Southern)"],
+    "seasons": {
+      "winter": {
+        "season_focus": "winter",
+        "retail_moment": "Big Finish (Dec), Black Friday (Nov), Start Something New (Jan)",
+        "weather": "sub-region dependent. Pacific Coast: mild and wet, 40s-50s, near-constant rain, snow rare at sea level. Inland NW / Mountain West: real winter, subzero MT/WY interior, sustained mountain snow, powder culture. Great Basin: cold and dry, bitter wind. CA inland: mild, valley fog, dry; Sierra snow at elevation.",
+        "light": "Pacific NW gray, soft, low-contrast, marine; Mountain West clear, sharp, blue-sky-and-snow; CA golden but lower-angle, shorter days",
+        "landscape": "Coastal NW evergreen-and-moss rainforest, wet asphalt, urban-coastal density (Seattle, Portland); Mountain snow-and-conifer alpine, ski-town infrastructure; Great Basin high desert, sage, distant mountain backdrop; CA oak-grass-and-vineyard inland, redwood-and-coastline coastal",
+        "activity_rhythm": "ski and snow-sports peak in the mountains; coastal storm-watching, winter salmon runs, indoor trades work; construction slows in mountains, continues in CA; trucks plow in mountains, support ski ops, haul gear",
+        "palette_hints": ["marine fog gray", "deep evergreen", "wet asphalt", "alpine snow and conifer", "high-desert sage", "CA golden-grass"],
+        "cgi_footage_implication": "West winter cells need a sub-region declared before season makes sense. Use regional_specificity to average to generic 'West' (fog, evergreen, gray) or sharpen to Pacific Coast / Mountain West / Great Basin / California."
+      },
+      "spring": {
+        "season_focus": "spring",
+        "retail_moment": "Declaration of Deals (Mar-Apr), 4x4 Day, Truck Month",
+        "weather": "Coastal NW still wet through April, drying May; Mountain West high-elevation snow into June, valleys thawing; Great Basin warming, windy; CA full bloom, golden hills greening then drying",
+        "light": "brightening across region; CA spring light famous through April; NW slowly emerging from gray",
+        "landscape": "CA super-bloom in good years, wildflower coast and foothills, vineyards greening; NW forest understory blooming, creeks running high; Mountain valley grass-and-pasture greening as melt begins",
+        "activity_rhythm": "mountain construction restarting; coastal salmon and crab seasons; ranching calving and branding; mountain biking lower elevations; trucks support ranching, ag-supply, recreation hauling"
+      },
+      "summer": {
+        "season_focus": "summer",
+        "retail_moment": "Make This The Summer Event, Summer of Jeep",
+        "weather": "sub-region dependent. Coastal NW mild and dry (70s-80s, weeks without rain); Inland WA/OR hot and dry, wildfire season; Mountain West warm days, cool alpine nights; Great Basin hot and dry; CA coastal mild, inland hot, Central Valley brutal, wildfire season",
+        "light": "Pacific NW long days, golden evening, clear; Mountain alpine-bright; CA golden in evening, hazy in heat",
+        "landscape": "NW dry brown lowland grass, dense green forest, salmon running; Mountain wildflower bloom, snow at highest elevations into July; CA dry-gold hills, heavy vineyards, episodic wildfire smoke; coastal kelp-and-beach culture",
+        "activity_rhythm": "hiking, camping, rafting, mountain biking, climbing, fishing at peak; national-park visitation peak (Glacier, Yellowstone, Tetons, Yosemite, Olympic, Rainier); coastal surf/kayak/beach; trucks haul recreational gear, support outdoor tourism and wildfire/forest-service work; construction full pace"
+      },
+      "fall": {
+        "season_focus": "fall",
+        "retail_moment": "Drive into Fall -> Black Friday",
+        "weather": "cooling fast in mountains (first snow at altitude Sept-Oct); coastal NW returns to gray and rain by November; CA hot through October, Santa Ana fire-risk peak, cooling November; Mountain West aspen color late Sept-early Oct",
+        "light": "aspen gold against conifer green and blue sky is the signature Mountain West fall image; CA low-angle golden, smoke-tinged in fire years; NW gray return",
+        "landscape": "aspen turn (CO, WY, MT, ID, UT, E. OR); larch turn in NW Cascades; vineyard harvest (CA, OR, WA wine country); ski resorts prepping; hunting season opens",
+        "activity_rhythm": "hunting (elk, deer, antelope Mountain West; deer and elk NW); football and college football; fall fishing; vineyard harvest; wildfire-response tail; trucks haul hunting, harvest, recreation gear"
+      }
+    }
+  }
+}

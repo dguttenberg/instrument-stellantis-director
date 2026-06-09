@@ -1,0 +1,48 @@
+{
+  "bucket": "environmental_context",
+  "scope": "lane",
+  "brand": null,
+  "lane": "midwest",
+  "confidence": "high",
+  "provenance": ["NOAA normals (qualitative)", "deep research"],
+  "notes_for_consumers": "Feeds environment prompts and footage queries. Midwest is wide-open horizon, continental winter (DRIER and WINDIER than Great Lakes), with agricultural infrastructure as the defining built environment and the highest per-capita watercraft density in the system. Year-End cells can reference harvest's tail into early winter (grain trucks, corn stubble). High-confidence climate-and-landscape is operative; sensory mood is creative reference.",
+  "content": {
+    "lane_label": "Midwest",
+    "seasons": {
+      "winter": {
+        "season_focus": "winter",
+        "retail_moment": "Big Finish (Dec), Black Friday (Nov), Start Something New (Jan)",
+        "weather": "cold and continental; northern Plains (MN, ND, SD) subzero overnights routinely; single-digit or below-zero daytime highs in worst stretches; WIND defines (windchill cuts harder than thermometer); snow accumulates, lake-effect absent except eastern MN edge; Plains snow dry, drifts heavily, blows across roads; southern Midwest (MO, KS) milder with ice-storm risk",
+        "light": "low-angle sun, big-sky horizon; short days; snow reflects light brightly; clear cold days common; storm fronts move through fast",
+        "landscape": "wide horizon; agricultural infrastructure visible (silos, grain elevators, machine sheds, corn stubble, livestock barns); small towns with main streets and water towers; metros (Minneapolis-St. Paul, KC, Omaha, Des Moines) urban-suburban; snow on roofs, plowed county roads, drifts at fence lines",
+        "activity_rhythm": "ice fishing real and serious (MN especially); snowmobile culture intense; late deer, waterfowl, upland-bird hunting; indoor equipment maintenance for farmers; trucks plow, haul, support ranching/farming",
+        "palette_hints": ["snow whites", "pale big-sky blue-gray", "corn-stubble tan", "grain-elevator and silo gray", "drifted snow", "steel gray"],
+        "cgi_footage_implication": "Northern Midwest winter is colder and more wind-exposed than GL; big sky, big drift patterns, less tree cover; trucks carry windburn and ice as much as snow."
+      },
+      "spring": {
+        "season_focus": "spring",
+        "retail_moment": "Declaration of Deals (Mar-Apr), 4x4 Day, Truck Month",
+        "weather": "late thaw in north (April), earlier in south; mud season real; May is planting season (defining agricultural moment); spring storms severe (Plains tornado season peaks May-June); hail risk; snow possible through April in northern Plains",
+        "light": "lengthening fast, clearer than winter, late golden hour across open horizon; storm-light dramatic",
+        "landscape": "fields turning bare to plowed to planted in weeks; new green emerging; farm equipment moving (tractors, planters, sprayers); outdoor construction starting; cattle to pasture",
+        "activity_rhythm": "planting season row-crop ag (corn, soybeans, wheat) defining; calving and lambing; spring fishing opens; trucks support agricultural and construction work"
+      },
+      "summer": {
+        "season_focus": "summer",
+        "retail_moment": "Make This The Summer Event, Summer of Jeep",
+        "weather": "hot and humid eastern Midwest, hot and dry western Plains; daily highs 80s-90s, occasional 100s; severe-weather peak (tornado, hail, derecho) through July; lake culture central in MN and across small-lake states",
+        "light": "long days, big golden hour, storm-light dramatic; wide horizon shows weather coming hours ahead",
+        "landscape": "corn knee-high by July, tasseled by August; pastures green; lakes busy (MN cabin culture, Lake of the Ozarks, KS reservoirs, IA recreational lakes); state and county fairs",
+        "activity_rhythm": "lake-and-cabin rhythm MN/WI/IA; wakeboard and ski culture; small-lake boating (highest per-capita watercraft density in system); cookouts, family reunions; farming concentrated in growing season"
+      },
+      "fall": {
+        "season_focus": "fall",
+        "retail_moment": "Drive into Fall -> Black Friday",
+        "weather": "crisp, clear; northern Midwest cools fast October; first frost mid-Oct; HARVEST season Sept-Nov is the defining rhythm; Indian summer days possible into November; first snow late Nov in north",
+        "light": "bright, clear, color in deciduous (maples, cottonwoods, oaks) where present; harvest dust in air; big late-golden-hour",
+        "landscape": "combine harvest across the landscape (corn Sept-Oct, soybeans Oct, wheat earlier); grain trucks running to elevators; equipment in fields; pumpkin patches; hunting blinds going up",
+        "activity_rhythm": "harvest is the defining moment (16-hour days, equipment running, grain moving); Big Ten Saturdays, NFL Sundays, Friday lights; deer season opens; waterfowl strong in Mississippi flyway states"
+      }
+    }
+  }
+}

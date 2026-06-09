@@ -79,6 +79,24 @@ def health() -> dict:
     return {"status": "ok"}
 
 
+BUSINESS_CENTERS = [
+    {"key": "great_lakes", "label": "Great Lakes", "abbrev": "GL"},
+    {"key": "southwest", "label": "Southwest", "abbrev": "SW"},
+    {"key": "northeast", "label": "Northeast", "abbrev": "NE"},
+    {"key": "southeast", "label": "Southeast", "abbrev": "SE"},
+    {"key": "midwest", "label": "Midwest", "abbrev": "MW"},
+    {"key": "west", "label": "West", "abbrev": "W"},
+]
+
+
+@app.get("/lanes")
+def lanes() -> dict:
+    """The business centers the director can create for (all resolve via Brand Gravity:
+    GL/SW have authored lane content; the rest resolve environmental_context per-lane
+    and fall back to brand baselines for audience/creative)."""
+    return {"lanes": BUSINESS_CENTERS}
+
+
 @app.get("/twelvelabs-filters")
 def twelvelabs_filters() -> dict:
     """The controlled TwelveLabs filter vocabulary, for the review-panel edit controls."""

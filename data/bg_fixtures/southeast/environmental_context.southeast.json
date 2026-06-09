@@ -1,0 +1,48 @@
+{
+  "bucket": "environmental_context",
+  "scope": "lane",
+  "brand": null,
+  "lane": "southeast",
+  "confidence": "high",
+  "provenance": ["NOAA normals (qualitative)", "deep research"],
+  "notes_for_consumers": "Feeds environment prompts and footage queries. Southeast winter renders WARMER, GREENER, and more church-and-football than GL/NE — Year-End reads warm-and-bright, not snow. Summer is the defining season. Bible Belt is visible in the built environment; football/faith/fishing/family are the anchors. High-confidence climate-and-landscape is operative; sensory mood is creative reference.",
+  "content": {
+    "lane_label": "Southeast",
+    "seasons": {
+      "winter": {
+        "season_focus": "winter",
+        "retail_moment": "Big Finish (Dec), Black Friday (Nov), Start Something New (Jan)",
+        "weather": "mild; coastal SE and FL stay warm (60s-70s, occasional 80s FL); inland (Atlanta, Nashville, Birmingham) freezing nights and 50s daytime; Appalachian ridge sees real cold and occasional snow but not sustained; ice storms more disruptive than snow; coastal gray-and-damp mornings, sunny afternoons typical",
+        "light": "soft, warmer than NE/GL at the same latitude (less cloud cover); pine canopy keeps green year-round; long shadows midday",
+        "landscape": "pine-dominated forest stays green; live oak with Spanish moss in coastal SE; bald cypress in swampy areas; brick ranch and mid-century neighborhoods; churches everywhere; tobacco/cotton agricultural infrastructure rural; NASCAR culture visible",
+        "activity_rhythm": "hunting season (deer, dove, quail) through winter; fishing nearly year-round; bowl-game and college-football-playoff culture peaks Dec-Jan; church and family-gathering rhythm strong; trucks haul deer, tow boats off-season, carry firewood and feed",
+        "palette_hints": ["pine green", "live oak and Spanish moss", "warm gray morning", "brick ranch red", "soft blue sky", "clay dirt"],
+        "cgi_footage_implication": "Winter cells render warmer, greener, more church-and-football than GL/NE; Year-End in SE reads warm-and-bright, not snow."
+      },
+      "spring": {
+        "season_focus": "spring",
+        "retail_moment": "Declaration of Deals (Mar-Apr), 4x4 Day, Truck Month",
+        "weather": "warm to hot quickly; azaleas and dogwoods Mar-Apr; magnolias by May; humidity ramping; tornado risk Dixie Alley Mar-May, severe thunderstorms",
+        "light": "bright, increasingly humid, late golden hour; saturation from dogwood, azalea, redbud, wisteria",
+        "landscape": "bloom layer over pine-and-deciduous backdrop; garden centers/agricultural-supply busy; construction full pace; coastal charter boats ramping",
+        "activity_rhythm": "outdoor peak before summer humidity peaks; SEC and ACC spring football; NASCAR Cup season opens; turkey hunting; crawfish boils Gulf Coast; Easter and Mother's Day gatherings central"
+      },
+      "summer": {
+        "season_focus": "summer",
+        "retail_moment": "Make This The Summer Event, Summer of Jeep",
+        "weather": "hot and humid (defining season); daily highs 90s most of the region; FL coast and Gulf hotter/stickier; afternoon thunderstorms daily; hurricane season; heat indices >100F regular",
+        "light": "hard, hazy in humidity; long days, bright dawn, harsh midday, dramatic afternoon storm light, long blue hour",
+        "landscape": "full canopy on deciduous, pine green constant; lake culture (Lanier, Murray, Hartwell, TN reservoirs, FL chain); coastal beach communities (OBX, Hilton Head, Tybee, 30A); cookout and porch culture dominates",
+        "activity_rhythm": "lake and boat season at peak; day compresses around heat; cookouts and family reunions; vacation travel within region"
+      },
+      "fall": {
+        "season_focus": "fall",
+        "retail_moment": "Drive into Fall -> Black Friday",
+        "weather": "heat breaks slowly; September still hot inland, hurricane-season peak; real fall mid-Oct to early Nov by latitude; Appalachian leaf color late Oct-early Nov; coastal stays warmer longer; first freeze mid-Nov NC/TN/KY",
+        "light": "clearer than summer; mountain leaf color (yellow, orange, red) in elevation; pine green constant elsewhere",
+        "landscape": "football takes over the calendar — SEC Saturdays, NFL Sundays, Friday lights, HBCU homecomings; tailgate culture peak; harvest displays in Appalachian elevations",
+        "activity_rhythm": "hunting opens (dove September, then deer); fall fishing; boats into storage inland; trucks haul deer, tow boats, support tailgate operations, carry hunting gear"
+      }
+    }
+  }
+}

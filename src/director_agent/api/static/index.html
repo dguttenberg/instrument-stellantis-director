@@ -64,6 +64,19 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:15px;heigh
 .empty-state{border:1.5px dashed var(--dcp-violet-a20);border-radius:var(--dcp-radius);padding:54px 30px;text-align:center}
 .empty-state .es-big{font-size:18px;font-weight:700;color:var(--dcp-white);text-transform:uppercase;letter-spacing:0.02em;margin-bottom:8px}
 .empty-state .es-sub{font-size:13px;color:rgba(255,255,255,0.45)}
+/* Region picker + collapsible columns */
+.region-chip{font-size:11px;font-weight:600;letter-spacing:0.04em;padding:6px 13px;border-radius:30px;cursor:pointer;border:1px solid var(--dcp-violet-a20);background:transparent;color:rgba(255,255,255,0.55);transition:all .15s}
+.region-chip.on{background:var(--dcp-green-a15);border-color:var(--dcp-green);color:var(--dcp-green)}
+.region-chip:hover{border-color:var(--dcp-green)}
+.col-head-row{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%}
+.col-head .collapse{cursor:pointer;color:rgba(255,255,255,0.4);font-size:12px;user-select:none;margin-right:5px}
+.col-head .collapse:hover{color:var(--dcp-green)}
+.col-head .runbtn{font-size:10px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;padding:5px 11px;border-radius:30px;background:var(--dcp-green);color:var(--dcp-midnight);border:none;cursor:pointer}
+.col-head .runbtn:hover{opacity:.85}
+.col-head .runbtn:disabled{opacity:.4;cursor:not-allowed}
+.col-head.collapsed-head{writing-mode:vertical-rl;transform:rotate(180deg);justify-content:center;align-items:center;color:var(--dcp-sky);cursor:pointer;border-bottom-color:var(--dcp-sky);letter-spacing:0.1em;padding:8px 0}
+.col-head.collapsed-head:hover{color:var(--dcp-green)}
+.lane-cell.collapsed{min-height:0;padding:0;border:none;background:transparent}
 .col-head{font-size:11px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:var(--dcp-green);padding:0 4px 6px;border-bottom:2px solid var(--dcp-green);display:flex;justify-content:space-between;align-items:center}
 .col-head.scene-col{color:rgba(255,255,255,0.45);border-bottom-color:var(--dcp-violet-a20)}
 /* Scene (editable) */
@@ -177,10 +190,8 @@ footer{background:var(--dcp-midnight);border-top:1px solid var(--dcp-green-a15);
     </div>
 
     <div class="bar">
-      <div class="label">Run</div>
-      <button class="btn btn-primary" id="run-great_lakes" onclick="runLane('great_lakes')">▶ Run Great Lakes</button>
-      <button class="btn btn-violet" id="run-southwest" onclick="runLane('southwest')">▶ Run Southwest</button>
-      <span style="flex:1"></span>
+      <div class="label">Regions</div>
+      <div id="region-picker" style="display:flex;gap:8px;flex-wrap:wrap;flex:1"></div>
       <div class="label">Export</div>
       <a class="btn btn-outline btn-sm" href="/export/cgi.xlsx" download>CGI .xlsx</a>
       <a class="btn btn-outline btn-sm" href="/export/twelvelabs.csv" download>TwelveLabs .csv</a>
@@ -194,6 +205,7 @@ footer{background:var(--dcp-midnight);border-top:1px solid var(--dcp-green-a15);
     <div class="matrix-head">
       <h2>Scene × Region Matrix</h2>
       <div class="legend">
+        <span style="color:rgba(255,255,255,0.4);text-transform:none;letter-spacing:0">Pick regions above · ▶ Run each column · click ▾ to collapse</span>
         <span><i class="dot" style="background:var(--dcp-green)"></i>auto-accept</span>
         <span><i class="dot" style="background:var(--dcp-sky)"></i>needs approve</span>
         <span><i class="dot" style="background:var(--dcp-ember)"></i>blocked</span>
@@ -211,7 +223,11 @@ footer{background:var(--dcp-midnight);border-top:1px solid var(--dcp-green-a15);
 </div></footer>
 
 <script>
-const LANES=[{key:'great_lakes',label:'Great Lakes'},{key:'southwest',label:'Southwest'}];
+let ALL_LANES=[];               // all business centers (from /lanes)
+let SHOWN=[];                   // lane keys shown as columns
+const COLLAPSED=new Set();      // lane keys collapsed to a thin strip
+const laneOf=k=>ALL_LANES.find(l=>l.key===k)||{key:k,label:k,abbrev:k};
+const shownLanes=()=>ALL_LANES.filter(l=>SHOWN.includes(l.key));
 const CELL_TYPES=['existing_running_footage','stock','regionalized_running_w_cgi_ai','regionalized_ai_scenes'];
 const DIAL_DEFS=[
  {key:'regional_specificity',name:'Regional specificity',star:true},
@@ -221,7 +237,7 @@ const DIAL_DEFS=[
 let PROJECT=null;
 let REC={recommendations:{},tool_label:{}};
 let TL_FILTERS={categories:[]};
-const results={great_lakes:{},southwest:{}};
+const results={};   // results[laneKey][sceneIndex] = {envelope, record}
 let MODAL_CTX=null;
 const recOf=ct=>REC.recommendations[ct]||{};
 const toolLabel=t=>REC.tool_label[t]||t;
@@ -241,7 +257,18 @@ function renderDials(){
   DIAL_DEFS.forEach(d=>{const i=document.getElementById('d-'+d.key);i.style.setProperty('--p',(dv[d.key]*100)+'%');});
 }
 
-function setRunEnabled(on){LANES.forEach(l=>{const b=document.getElementById('run-'+l.key);if(b)b.disabled=!on;});}
+function setRunEnabled(on){shownLanes().forEach(l=>{const b=document.getElementById('run-'+l.key);if(b)b.disabled=!on;});}
+
+function renderRegionPicker(){
+  document.getElementById('region-picker').innerHTML=ALL_LANES.map(l=>
+    `<span class="region-chip ${SHOWN.includes(l.key)?'on':''}" onclick="toggleRegion('${l.key}')">${esc(l.label)}</span>`).join('');
+}
+function toggleRegion(key){
+  if(SHOWN.includes(key)) SHOWN=SHOWN.filter(k=>k!==key); else SHOWN.push(key);
+  if(!results[key]) results[key]={};
+  renderRegionPicker(); renderMatrix();
+}
+function toggleCollapse(key){ if(COLLAPSED.has(key))COLLAPSED.delete(key); else COLLAPSED.add(key); renderMatrix(); }
 
 function renderMatrix(){
   const m=document.getElementById('matrix');
@@ -249,13 +276,21 @@ function renderMatrix(){
     m.style.display='block';
     m.innerHTML=`<div class="empty-state"><div class="es-big">No matrix yet</div>
       <div class="es-sub">Upload a .pdf or .pptx storyboard above to extract the scene matrix — or click <b>Load sample</b>.</div></div>`;
-    setRunEnabled(false);
     return;
   }
+  const lanes=shownLanes();
   m.style.display='grid';
-  setRunEnabled(true);
+  m.style.gridTemplateColumns='360px '+lanes.map(l=>COLLAPSED.has(l.key)?'46px':'minmax(200px,1fr)').join(' ');
   let h=`<div class="col-head scene-col">Scene &amp; technique (editable)</div>`;
-  LANES.forEach(l=>h+=`<div class="col-head">${l.label}</div>`);
+  lanes.forEach(l=>{
+    if(COLLAPSED.has(l.key)){
+      h+=`<div class="col-head collapsed-head" onclick="toggleCollapse('${l.key}')" title="Expand ${esc(l.label)}">${esc(l.abbrev)} ▸</div>`;
+    }else{
+      h+=`<div class="col-head"><div class="col-head-row">
+        <span><span class="collapse" onclick="toggleCollapse('${l.key}')" title="Collapse">▾</span>${esc(l.label)}</span>
+        <button class="runbtn" id="run-${l.key}" onclick="runLane('${l.key}')">▶ Run</button></div></div>`;
+    }
+  });
   PROJECT.script.scenes.forEach(s=>{
     h+=`<div class="scene-cell">
       <div class="scene-row1"><span class="scene-idx">${s.scene_index}</span>
@@ -272,11 +307,14 @@ function renderMatrix(){
       <input class="fld" value="${esc(s.trim_intent||'')}" placeholder="e.g. D28H91"
         onchange="saveScene(${s.scene_index},{trim_intent:this.value})">
     </div>`;
-    LANES.forEach(l=>h+=`<div class="lane-cell empty" id="cell-${l.key}-${s.scene_index}">—</div>`);
+    lanes.forEach(l=>{
+      if(COLLAPSED.has(l.key)) h+=`<div class="lane-cell collapsed"></div>`;
+      else h+=`<div class="lane-cell empty" id="cell-${l.key}-${s.scene_index}">—</div>`;
+    });
   });
   m.innerHTML=h;
-  // repaint any existing results
-  LANES.forEach(l=>Object.keys(results[l.key]).forEach(i=>renderCell(l.key,parseInt(i))));
+  // repaint any existing results for expanded, shown lanes
+  lanes.forEach(l=>{ if(!COLLAPSED.has(l.key)) Object.keys(results[l.key]||{}).forEach(i=>renderCell(l.key,parseInt(i))); });
 }
 
 async function saveScene(idx,patch){
@@ -289,7 +327,7 @@ async function loadSample(){
   const st=document.getElementById('ingest-status'); st.textContent='Loading sample…';
   try{
     PROJECT=await(await fetch('/project/sample',{method:'POST'})).json();
-    for(const l of LANES)results[l.key]={};
+    for(const l of ALL_LANES)results[l.key]={};
     renderDials(); renderMatrix();
     st.textContent='✓ Sample loaded ('+PROJECT.script.scenes.length+' scenes) — bundled South:15.';
   }catch(e){st.textContent='';alert('Could not load sample: '+e.message);}
@@ -304,7 +342,7 @@ async function upload(f){
     const res=await fetch('/ingest',{method:'POST',body:fd});
     if(!res.ok){throw new Error((await res.json()).detail||res.statusText);}
     PROJECT=await res.json();
-    for(const l of LANES)results[l.key]={};
+    for(const l of ALL_LANES)results[l.key]={};
     renderDials(); renderMatrix();
     st.textContent='✓ '+PROJECT.script.scenes.length+' scenes extracted — confirm the techniques, then run.';
   }catch(e){st.textContent=''; alert('Ingest failed: '+e.message);}
@@ -337,7 +375,8 @@ function renderCell(lane,idx){
 
 async function runLane(lane){
   if(!PROJECT)return;
-  for(const l of LANES)document.getElementById('run-'+l.key).disabled=true;
+  if(!results[lane])results[lane]={};
+  setRunEnabled(false);
   let prior=null;
   try{
     for(const s of PROJECT.script.scenes){
@@ -351,7 +390,7 @@ async function runLane(lane){
       results[lane][s.scene_index]=data; prior=data.envelope; renderCell(lane,s.scene_index);
     }
   }catch(e){alert('Run stopped: '+e.message);}
-  finally{for(const l of LANES)document.getElementById('run-'+l.key).disabled=false;}
+  finally{setRunEnabled(true);}
 }
 
 /* ---- review + EDIT modal ---- */
@@ -414,7 +453,7 @@ function collectFilters(i){
 
 function openModal(lane,idx){
   const r=results[lane][idx]; MODAL_CTX={lane,idx,cell_id:r.record.cell_id};
-  const env=r.envelope,rec=r.record,laneLabel=LANES.find(l=>l.key===lane).label;
+  const env=r.envelope,rec=r.record,laneLabel=laneOf(lane).label;
   const ct=env.cell_type, rc=recOf(ct);
   const status=rec.approved?'approved':rec.review_status;
   const banner=rc.headline?`<div class="rec-banner"><span class="rb-head">Recommending</span><span class="rb-text">${esc(rc.headline)}</span><span class="rec-tool ${rc.tool}">${toolLabel(rc.tool)}</span>${rc.preferred?'<span class="rec-primary">primary</span>':''}</div>`:'';
@@ -478,8 +517,11 @@ document.getElementById('dropzone').addEventListener('drop',e=>{if(e.dataTransfe
 (async function init(){
   REC=await(await fetch('/recommendations')).json();
   TL_FILTERS=await(await fetch('/twelvelabs-filters')).json();
+  ALL_LANES=(await(await fetch('/lanes')).json()).lanes;
+  ALL_LANES.forEach(l=>results[l.key]={});
+  SHOWN=['great_lakes','southwest'].filter(k=>ALL_LANES.some(l=>l.key===k));
   PROJECT=await(await fetch('/project')).json();
-  renderDials(); renderMatrix();
+  renderDials(); renderRegionPicker(); renderMatrix();
 })();
 </script>
 </body>
