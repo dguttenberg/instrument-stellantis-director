@@ -20,7 +20,8 @@ SUBSTANCE = {"type": "substance_row", "confidence": "high", "row": {
     "camera_angles": "action_front_3q", "ai_image_generator_prompt": "360 HDRI, no people."}}
 CG_ENV = {"type": "cg_env_prompt", "confidence": "medium", "for_pipeline": "runway", "prompt": "winter env"}
 TL = {"type": "twelvelabs_query", "confidence": "high",
-      "query": {"tags": ["ram_1500", "badge"], "natural_language": "Ram 1500 hemi badge close-up, winter daylight"}}
+      "query": {"tags": ["ram_1500", "badge"], "natural_language": "Ram 1500 hemi badge close-up, winter daylight",
+                "filters": {"brand": ["Ram"], "vehicle_type": ["Truck"], "environment": ["Rural", "Overcast"]}}}
 STOCK = {"type": "stock_search", "confidence": "medium",
          "natural_language_description": "snowy town at dusk", "tags_for_indexed_search": ["winter", "no_people"]}
 

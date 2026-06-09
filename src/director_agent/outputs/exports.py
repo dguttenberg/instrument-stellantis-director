@@ -16,13 +16,16 @@ from openpyxl import Workbook
 
 from ..draftstore.store import DraftRecord
 from ..recommendations import output_role, recommendation_for
+from ..twelvelabs import FILTER_KEYS
 from .substance_excel import SUBSTANCE_COLUMNS
 
 ENV_REF_COLUMNS = ["Cell", "Lane", "Recommendation", "For Pipeline", "AI / Runway Env Prompt"]
-TWELVELABS_FIELDS = [
-    "cell_id", "lane", "role", "recommendation", "query_type",
-    "tags", "natural_language", "duration_min", "duration_max",
-]
+# prompt (natural_language) + a column per controlled filter, then tags + duration range.
+TWELVELABS_FIELDS = (
+    ["cell_id", "lane", "role", "recommendation", "query_type", "natural_language"]
+    + FILTER_KEYS
+    + ["tags", "duration_min", "duration_max"]
+)
 
 
 def _lane_of(cell_id: str) -> str:
@@ -86,15 +89,18 @@ def build_twelvelabs_rows(records: Iterable[DraftRecord], approved_only: bool = 
         headline = recommendation_for(rec.cell_type).get("headline", "")
         role = output_role(rec.cell_type, t)  # primary (core/stock) vs supporting (base plate)
         common = {"cell_id": rec.cell_id, "lane": _lane_of(rec.cell_id), "role": role, "recommendation": headline}
+        empty_filters = {k: "" for k in FILTER_KEYS}
         if t == "twelvelabs_query":
             q = out.get("query", {})
-            rows.append({**common, "query_type": "footage",
-                         "tags": ", ".join(q.get("tags", [])), "natural_language": q.get("natural_language", ""),
+            filters = q.get("filters") or {}
+            filter_cols = {k: "; ".join(filters.get(k) or []) for k in FILTER_KEYS}
+            rows.append({**common, "query_type": "footage", "natural_language": q.get("natural_language", ""),
+                         **filter_cols, "tags": ", ".join(q.get("tags", [])),
                          "duration_min": q.get("duration_min", ""), "duration_max": q.get("duration_max", "")})
         else:
             rows.append({**common, "query_type": "stock",
+                         "natural_language": out.get("natural_language_description", ""), **empty_filters,
                          "tags": ", ".join(out.get("tags_for_indexed_search", [])),
-                         "natural_language": out.get("natural_language_description", ""),
                          "duration_min": "", "duration_max": ""})
     return rows
 

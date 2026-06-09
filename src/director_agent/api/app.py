@@ -79,6 +79,14 @@ def health() -> dict:
     return {"status": "ok"}
 
 
+@app.get("/twelvelabs-filters")
+def twelvelabs_filters() -> dict:
+    """The controlled TwelveLabs filter vocabulary, for the review-panel edit controls."""
+    from ..twelvelabs import load_taxonomy
+
+    return load_taxonomy()
+
+
 @app.get("/recommendations")
 def recommendations() -> dict:
     """The recommendation each cell type makes (headline, tool, primary/supporting),

@@ -104,6 +104,14 @@ textarea.fld{resize:vertical;min-height:38px;line-height:1.4}
 .rec-banner .rb-head{font-size:9.5px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--dcp-violet)}
 .rec-banner .rb-text{font-size:15px;font-weight:700;color:var(--dcp-white)}
 .sec-label{font-size:10px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin:4px 0 10px;padding-top:6px;border-top:1px dashed var(--dcp-violet-a20)}
+/* TwelveLabs filter editor */
+.flt-section{border-top:1px dashed var(--dcp-violet-a20);margin-top:12px;padding-top:10px}
+.flt-note{font-size:11px;color:var(--dcp-sky);margin-bottom:9px}
+.flt-row{display:flex;align-items:center;gap:8px;margin-bottom:7px;flex-wrap:wrap}
+.flt-label{font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:rgba(255,255,255,0.45);min-width:124px}
+.fchip{font-size:11px;padding:3px 9px;border-radius:20px;background:var(--dcp-violet-a20);color:var(--dcp-white);display:inline-flex;align-items:center;gap:6px}
+.fchip b{cursor:pointer;color:var(--dcp-sky);font-weight:700}
+.flt-add{font-size:11px;padding:5px 7px;border-radius:6px;background:var(--dcp-midnight);color:var(--dcp-green);border:1px solid var(--dcp-violet-a20);cursor:pointer;font-weight:600}
 .spinner{width:14px;height:14px;border:2px solid var(--dcp-violet-a20);border-top-color:var(--dcp-sky);border-radius:50%;animation:spin .7s linear infinite}
 .running-label{font-size:10.5px;color:var(--dcp-sky);letter-spacing:0.08em;text-transform:uppercase}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -212,6 +220,7 @@ const DIAL_DEFS=[
  {key:'narrative_continuity',name:'Narrative continuity'}];
 let PROJECT=null;
 let REC={recommendations:{},tool_label:{}};
+let TL_FILTERS={categories:[]};
 const results={great_lakes:{},southwest:{}};
 let MODAL_CTX=null;
 const recOf=ct=>REC.recommendations[ct]||{};
@@ -306,7 +315,9 @@ function chipFor(o,ct){
   let inner;
   if(o.type==='substance_row'){const h=o.row['Color Preference (HEX)']||o.row.color_preference_hex||'#000';
     inner=`<span class="sw" style="background:${esc(h)}"></span>Substance ${esc(h)}`;}
-  else inner=o.type.replace(/_/g,' ').replace('twelvelabs','TwelveLabs');
+  else if(o.type==='twelvelabs_query'){const f=(o.query&&o.query.filters)||{};const n=Object.values(f).filter(v=>v&&v.length).length;
+    inner='TwelveLabs'+(n?` · ${n} filters`:'');}
+  else inner=o.type.replace(/_/g,' ');
   return `<span class="chip ${role}">${role==='supporting'?'support· ':''}${inner}</span>`;
 }
 function renderCell(lane,idx){
@@ -362,7 +373,7 @@ function renderOutputEdit(o,i){
   }else if(o.type==='super_text'){
     body=field('Super copy','o'+i+'-content',o.content,true)+field('Voice tags (comma)','o'+i+'-tags',(o.voice_tags||[]).join(', '))+field('Legal disclaimers (comma)','o'+i+'-disc',(o.legal_disclaimers||[]).join(', '));
   }else if(o.type==='twelvelabs_query'){
-    body=field('Natural-language query (keep short / broad)','o'+i+'-nl',o.query.natural_language,true)+field('Tags (comma)','o'+i+'-tags',(o.query.tags||[]).join(', '))+`<div class="grid2">${field('Duration min','o'+i+'-dmin',o.query.duration_min??'')}${field('Duration max','o'+i+'-dmax',o.query.duration_max??'')}</div>`;
+    body=field('Natural-language query (keep short / broad)','o'+i+'-nl',o.query.natural_language,true)+field('Tags (comma)','o'+i+'-tags',(o.query.tags||[]).join(', '))+`<div class="grid2">${field('Duration min','o'+i+'-dmin',o.query.duration_min??'')}${field('Duration max','o'+i+'-dmax',o.query.duration_max??'')}</div>`+filterEditor(i,o.query);
   }else if(o.type==='cg_env_prompt'){
     body=field('For pipeline','o'+i+'-pipe',o.for_pipeline)+field('Environment prompt (rich / specific)','o'+i+'-prompt',o.prompt,true);
   }else if(o.type==='stock_search'){
@@ -373,6 +384,32 @@ function renderOutputEdit(o,i){
   return `<div class="out-block" data-type="${o.type}" data-i="${i}">
     <div class="out-block-head"><span class="out-type">${o.type.replace(/_/g,' ')}</span>
       <div class="f-wrap" style="min-width:120px"><label>Confidence</label>${confSel('o'+i+'-conf',o.confidence)}</div></div>${body}</div>`;
+}
+
+function filterChip(v){return `<span class="fchip" data-val="${esc(v)}">${esc(v)} <b onclick="this.parentNode.remove()">&times;</b></span>`;}
+function addFilter(i,key,value){if(!value)return;const c=document.getElementById(`o${i}-flt-${key}`);
+  if([...c.querySelectorAll('.fchip')].some(x=>x.dataset.val===value))return;
+  c.insertAdjacentHTML('beforeend',filterChip(value));}
+function filterEditor(i,query){
+  const fl=(query&&query.filters)||{};
+  const rows=(TL_FILTERS.categories||[]).filter(c=>c.key!=='duration').map(cat=>{
+    const sel=fl[cat.key]||[];
+    const chips=sel.map(filterChip).join('');
+    const opts=cat.values.map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join('');
+    return `<div class="flt-row"><span class="flt-label">${esc(cat.label)}</span>
+      <span id="o${i}-flt-${cat.key}">${chips}</span>
+      <select class="flt-add" onchange="addFilter(${i},'${cat.key}',this.value);this.selectedIndex=0"><option value="">+ add</option>${opts}</select></div>`;
+  }).join('');
+  return `<div class="flt-section"><div class="flt-note"><b>Search filters</b> — select only the ones that apply; you don't need them all.</div>${rows}</div>`;
+}
+function collectFilters(i){
+  const f={};
+  for(const cat of (TL_FILTERS.categories||[])){ if(cat.key==='duration')continue;
+    const c=document.getElementById(`o${i}-flt-${cat.key}`); if(!c)continue;
+    const vals=[...c.querySelectorAll('.fchip')].map(x=>x.dataset.val);
+    if(vals.length)f[cat.key]=vals;
+  }
+  return Object.keys(f).length?f:null;
 }
 
 function openModal(lane,idx){
@@ -413,7 +450,7 @@ function collectOutputs(){
       'Nameplate':val('o'+i+'-nameplate'),'Specific Trim Request':val('o'+i+'-trim'),'Location Variant':val('o'+i+'-loc'),
       'Color Preference (HEX)':val('o'+i+'-hex'),'Camera Angles':val('o'+i+'-cam'),'AI Image Generator Prompt':val('o'+i+'-aiprompt')}};
     if(t==='super_text')return {type:t,confidence:conf,content:val('o'+i+'-content'),voice_tags:list('o'+i+'-tags'),legal_disclaimers:list('o'+i+'-disc')};
-    if(t==='twelvelabs_query')return {type:t,confidence:conf,query:{tags:list('o'+i+'-tags'),natural_language:val('o'+i+'-nl'),duration_min:num('o'+i+'-dmin'),duration_max:num('o'+i+'-dmax')}};
+    if(t==='twelvelabs_query')return {type:t,confidence:conf,query:{tags:list('o'+i+'-tags'),natural_language:val('o'+i+'-nl'),duration_min:num('o'+i+'-dmin'),duration_max:num('o'+i+'-dmax'),filters:collectFilters(i)}};
     if(t==='cg_env_prompt')return {type:t,confidence:conf,for_pipeline:val('o'+i+'-pipe'),prompt:val('o'+i+'-prompt')};
     if(t==='stock_search')return {type:t,confidence:conf,natural_language_description:val('o'+i+'-desc'),tags_for_indexed_search:list('o'+i+'-tags')};
     if(t==='gap_signal')return {type:t,confidence:conf,reason:val('o'+i+'-reason'),lane:val('o'+i+'-lane'),shot_type:val('o'+i+'-shot')||null};
@@ -440,6 +477,7 @@ document.getElementById('dropzone').addEventListener('drop',e=>{if(e.dataTransfe
 
 (async function init(){
   REC=await(await fetch('/recommendations')).json();
+  TL_FILTERS=await(await fetch('/twelvelabs-filters')).json();
   PROJECT=await(await fetch('/project')).json();
   renderDials(); renderMatrix();
 })();

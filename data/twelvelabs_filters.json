@@ -1,0 +1,181 @@
+{
+  "categories": [
+    {
+      "key": "brand",
+      "label": "Brand",
+      "type": "multi",
+      "values": [
+        "Dodge",
+        "Chrysler",
+        "Ram",
+        "Jeep"
+      ]
+    },
+    {
+      "key": "project",
+      "label": "Project",
+      "type": "multi",
+      "values": [
+        "M18368 RC Dodge Durango",
+        "M18176 Never Stop Being American",
+        "M15624 2021 All Vehicles Running Footage and Product",
+        "M16578 Highway 93",
+        "M16488 Pacifica Van Life",
+        "M17786 Theres Only One CEO",
+        "M18456 Dodge Scat Pack",
+        "M17506 Thanking Our Parents",
+        "M18278 Jeep Americas Influncer",
+        "M18364 Dodge MAP Retail",
+        "M18503 Ram Diesel Brothers",
+        "M18505 Running Footage and Lifestyle"
+      ]
+    },
+    {
+      "key": "vehicle_type",
+      "label": "Vehicle type",
+      "type": "multi",
+      "values": [
+        "Truck",
+        "Suv",
+        "Muscle Car",
+        "Other",
+        "Van",
+        "Sedan",
+        "Minivan"
+      ]
+    },
+    {
+      "key": "trim",
+      "label": "Trim",
+      "type": "multi",
+      "values": [
+        "Tradesman",
+        "Express",
+        "Warlock",
+        "Bighorn",
+        "Laramie",
+        "Rebel",
+        "RHO",
+        "Limited",
+        "Limited Longhorn",
+        "Tungsten"
+      ]
+    },
+    {
+      "key": "color",
+      "label": "Color",
+      "type": "multi",
+      "values": [
+        "Red",
+        "Black",
+        "Blue",
+        "White",
+        "Gray",
+        "Dark",
+        "Dark Gray",
+        "Maroon",
+        "Silver",
+        "Dark Green",
+        "Green",
+        "Purple",
+        "Light Blue",
+        "Orange",
+        "Teal"
+      ]
+    },
+    {
+      "key": "framing",
+      "label": "Framing",
+      "type": "multi",
+      "values": [
+        "Medium",
+        "Close-Up",
+        "Wide",
+        "Aerial",
+        "Interior"
+      ]
+    },
+    {
+      "key": "camera_movement",
+      "label": "Camera movement",
+      "type": "multi",
+      "values": [
+        "Static",
+        "Tracking",
+        "Drone",
+        "Handheld"
+      ]
+    },
+    {
+      "key": "action",
+      "label": "Action",
+      "type": "multi",
+      "values": [
+        "Driving",
+        "Parked",
+        "Burnout",
+        "Off-Roading",
+        "Idle",
+        "Drifting",
+        "Driving With Side-By-Sides"
+      ]
+    },
+    {
+      "key": "environment",
+      "label": "Environment",
+      "type": "multi",
+      "values": [
+        "Sunny",
+        "Road",
+        "City",
+        "Blue Sky",
+        "Rural",
+        "Desert",
+        "Night",
+        "Pine Trees",
+        "Forest",
+        "Overcast",
+        "Mountains",
+        "Trees",
+        "Water",
+        "Dirt Road",
+        "Beach",
+        "Parking Garage",
+        "Garage",
+        "Ocean"
+      ]
+    },
+    {
+      "key": "mood",
+      "label": "Mood",
+      "type": "multi",
+      "values": [
+        "Calm",
+        "Dynamic",
+        "Urban",
+        "Intense",
+        "Serene",
+        "Focused",
+        "Modern",
+        "Mysterious",
+        "Adventure",
+        "Industrial",
+        "Adventurous",
+        "Casual",
+        "Powerful",
+        "Relaxed",
+        "Sleek",
+        "Rugged",
+        "Scenic",
+        "Smooth"
+      ]
+    },
+    {
+      "key": "duration",
+      "label": "Duration",
+      "type": "range",
+      "range_label": "0\u20131297s (range slider)",
+      "values": []
+    }
+  ]
+}

@@ -47,6 +47,25 @@ class ScriptPosition(BaseModel):
 # --------------------------------------------------------------------------- #
 # Output object types.
 # --------------------------------------------------------------------------- #
+class TwelveLabsFilters(BaseModel):
+    """Controlled filters the TwelveLabs tool exposes (see data/twelvelabs_filters.json).
+    All optional and sparse — the director selects ONLY the categories that apply;
+    most queries use just a few. Values must come from the controlled vocabulary."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    brand: Optional[List[str]] = None
+    project: Optional[List[str]] = None
+    vehicle_type: Optional[List[str]] = None
+    trim: Optional[List[str]] = None
+    color: Optional[List[str]] = None
+    framing: Optional[List[str]] = None
+    camera_movement: Optional[List[str]] = None
+    action: Optional[List[str]] = None
+    environment: Optional[List[str]] = None
+    mood: Optional[List[str]] = None
+
+
 class TwelveLabsQueryBody(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
@@ -54,6 +73,7 @@ class TwelveLabsQueryBody(BaseModel):
     natural_language: str
     duration_min: Optional[float] = None
     duration_max: Optional[float] = None
+    filters: Optional[TwelveLabsFilters] = None
 
 
 class TwelveLabsQuery(BaseModel):

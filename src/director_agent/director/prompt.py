@@ -8,6 +8,22 @@ from typing import Optional
 from ..schemas.bg import BGResponse
 from ..schemas.cell import CellInput
 from ..schemas.dials import Dials, StylingInputs
+from ..twelvelabs import prompt_vocab
+from .cell_specs import allowed_output_types
+
+TWELVELABS_FILTER_BLOCK = """\
+
+TwelveLabs filters — when you emit a twelvelabs_query, also fill `query.filters` by
+selecting ONLY the categories that clearly apply to THIS scene. You do NOT need to set
+every category — most queries use just a few; leaving one unset is normal and expected.
+Use ONLY the exact values listed. Brand is always Ram. Set vehicle_type, trim, and color
+when known (trim from the script's trim intent if given). Pick a Project only if a footage
+library clearly matches (e.g. running-footage or MAP Retail collections). Add framing /
+camera_movement / action / environment / mood only when the scene clearly implies them.
+
+Controlled filter vocabulary:
+{vocab}
+"""
 
 # Placeholder system prompt per spec §3; tightens in a creative review before pitch.
 SYSTEM_TEMPLATE = """\
@@ -159,7 +175,7 @@ def dial_directives(dials: Dials) -> str:
 
 
 def build_system_prompt(styling: StylingInputs, dials: Dials, cell_type: str) -> str:
-    return SYSTEM_TEMPLATE.format(
+    prompt = SYSTEM_TEMPLATE.format(
         dial_directives=dial_directives(dials),
         tone_of_voice=styling.tone_of_voice,
         creative_intent=styling.creative_intent,
@@ -172,6 +188,10 @@ def build_system_prompt(styling: StylingInputs, dials: Dials, cell_type: str) ->
         narrative_continuity=dials.narrative_continuity,
         cell_guidance=CELL_GUIDANCE[cell_type],
     )
+    # Only cells that emit a twelvelabs_query need the controlled filter vocabulary.
+    if "twelvelabs_query" in allowed_output_types(cell_type):
+        prompt += "\n" + TWELVELABS_FILTER_BLOCK.format(vocab=prompt_vocab())
+    return prompt
 
 
 def build_user_payload(
