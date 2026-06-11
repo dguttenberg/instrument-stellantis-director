@@ -1,0 +1,440 @@
+/* ============================================================================
+ * DCP Design System — drop-in globals.css
+ * Source of truth: github.com/donerdu/dcp_design_system › app/globals.css
+ *
+ * Usage (existing Next.js + Tailwind v4 + shadcn project):
+ *   1. Replace your app/globals.css with this file
+ *   2. Copy Magnetik OTFs into  public/fonts/magnetik/  (9 weights)
+ *   3. Wrap <html> with class="dark" toggle for theme switching
+ *
+ * Requires: tailwindcss v4, tw-animate-css, shadcn (CSS variables mode)
+ * ============================================================================ */
+
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+/* Magnetik font family */
+@font-face {
+  font-family: "Magnetik";
+  src: url("/fonts/magnetik/Magnetik-Thin.otf") format("opentype");
+  font-weight: 100;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Magnetik";
+  src: url("/fonts/magnetik/Magnetik-ExtraLight.otf") format("opentype");
+  font-weight: 200;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Magnetik";
+  src: url("/fonts/magnetik/Magnetik-Light.otf") format("opentype");
+  font-weight: 300;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Magnetik";
+  src: url("/fonts/magnetik/Magnetik-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Magnetik";
+  src: url("/fonts/magnetik/Magnetik-Medium.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Magnetik";
+  src: url("/fonts/magnetik/Magnetik-SemiBold.otf") format("opentype");
+  font-weight: 600;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Magnetik";
+  src: url("/fonts/magnetik/Magnetik-Bold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Magnetik";
+  src: url("/fonts/magnetik/Magnetik-ExtraBold.otf") format("opentype");
+  font-weight: 800;
+  font-style: normal;
+}
+@font-face {
+  font-family: "Magnetik";
+  src: url("/fonts/magnetik/Magnetik-Heavy.otf") format("opentype");
+  font-weight: 900;
+  font-style: normal;
+}
+
+@custom-variant dark (&:is(.dark *));
+
+/* Shadow scale — non-inline @theme so utilities (shadow-xs … shadow-2xl)
+   reference var(--shadow-*) and can be overridden under .dark. */
+  /* Light source: top-left → shadows cast down and to the right (+x, +y). */
+/* DCP Brand color */
+@theme {
+  --color-midnight: #000531;
+  --color-aurora-green: #20fe8f;
+  --color-aurora-green-hover: #17c574;
+  --color-cool-grey: #e6e7e8;
+  --color-aurora-violet: #545dff;
+  --color-sky-blue: #76beff;
+  --color-sunset-ember: #ff8371;
+  --shadow-2xs: 1px 1px 0 rgb(0 0 0 / 0.05);
+  --shadow-xs: 1px 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-sm: 2px 2px 4px 0 rgb(0 0 0 / 0.1), 1px 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-md: 4px 4px 8px -1px rgb(0 0 0 / 0.1), 2px 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg:
+    8px 10px 18px -3px rgb(0 0 0 / 0.1), 4px 4px 8px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl:
+    14px 18px 28px -5px rgb(0 0 0 / 0.1), 6px 8px 12px -6px rgb(0 0 0 / 0.1);
+  --shadow-2xl: 20px 28px 50px -12px rgb(0 0 0 / 0.25);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-magnetik);
+  --font-magnetik: "Magnetik", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+
+  /* Motion tokens */
+  --duration-fast: 100ms;
+  --duration-base: 150ms;
+  --duration-slow: 250ms;
+  --duration-slower: 350ms;
+  --duration-slowest: 500ms;
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-enter: cubic-bezier(0, 0, 0.2, 1);
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+
+  /* Z-index scale */
+  --z-base: 0;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-overlay: 300;
+  --z-modal: 400;
+  --z-popover: 500;
+  --z-toast: 600;
+  --z-tooltip: 700;
+}
+
+/* Color ramps + semantic tokens — emitted as real CSS variables (not inlined),
+   so they resolve via var() in inline styles. */
+:root {
+  --color-green-50: #e8fff2;
+  --color-green-100: #c6ffdf;
+  --color-green-200: #8bffbe;
+  --color-green-300: #52fea3;
+  --color-green-400: #20fe8f;
+  --color-green-500: #17c574;
+  --color-green-600: #0f9457;
+  --color-green-700: #0b6f42;
+  --color-green-800: #08502f;
+  --color-green-900: #053220;
+
+  --color-violet-50: #eeefff;
+  --color-violet-100: #d9dbff;
+  --color-violet-200: #b5b9ff;
+  --color-violet-300: #8890ff;
+  --color-violet-400: #545dff;
+  --color-violet-500: #3a44e8;
+  --color-violet-600: #2a33b8;
+  --color-violet-700: #1f2688;
+  --color-violet-800: #161b5e;
+  --color-violet-900: #0d1038;
+
+  --color-sky-50: #eef7ff;
+  --color-sky-100: #d8ecff;
+  --color-sky-200: #b5daff;
+  --color-sky-300: #93c9ff;
+  --color-sky-400: #76beff;
+  --color-sky-500: #4a9ae8;
+  --color-sky-600: #2f79bd;
+  --color-sky-700: #205691;
+  --color-sky-800: #143964;
+  --color-sky-900: #0b2040;
+
+  --color-ember-50: #fff1ee;
+  --color-ember-100: #ffdcd5;
+  --color-ember-200: #ffb9ae;
+  --color-ember-300: #ff9e8d;
+  --color-ember-400: #ff8371;
+  --color-ember-500: #e05e4b;
+  --color-ember-600: #b84535;
+  --color-ember-700: #8e3124;
+  --color-ember-800: #621f16;
+  --color-ember-900: #3a100a;
+
+  --color-neutral-0: #ffffff;
+  --color-neutral-50: #f4f4f6;
+  --color-neutral-100: #e6e7e8;
+  --color-neutral-200: #d0d2d8;
+  --color-neutral-300: #a8abb5;
+  --color-neutral-400: #7a7d8a;
+  --color-neutral-500: #54576a;
+  --color-neutral-600: #3a3c52;
+  --color-neutral-700: #222440;
+  --color-neutral-800: #101335;
+  --color-neutral-900: #000531;
+
+  /* Semantic tokens — role-based aliases onto the ramps */
+  --color-bg: var(--color-neutral-0);
+  --color-bg-muted: var(--color-neutral-50);
+  --color-border-token: var(--color-neutral-200);
+  --color-fg: var(--color-neutral-900);
+  --color-fg-muted: var(--color-neutral-600);
+  --color-fg-subtle: var(--color-neutral-500);
+  --color-accent-token: var(--color-green-400);
+  --color-secondary-token: var(--color-violet-400);
+  --color-link: var(--color-violet-400);
+  --color-focus-ring: var(--color-violet-400);
+  --color-danger: #e5484d;
+  --color-warning: #f5a524;
+}
+
+/* Light theme — DCP brand mapped onto shadcn tokens */
+:root {
+  --radius: 0.75rem;
+
+  --background: #ffffff;
+  --foreground: #000531;
+
+  --card: #ffffff;
+  --card-foreground: #000531;
+
+  --popover: #ffffff;
+  --popover-foreground: #000531;
+
+  --primary: #76beff;
+  --primary-foreground: #000531;
+
+  --secondary: #f4f4f6;
+  --secondary-foreground: #000531;
+
+  --muted: #f4f4f6;
+  --muted-foreground: #5b5d70;
+
+  --accent: #eef0ff;
+  --accent-foreground: #545dff;
+
+  --destructive: #ff8371;
+
+  --border: rgba(0, 5, 49, 0.08);
+  --input: rgba(0, 5, 49, 0.12);
+  --ring: #545dff;
+
+  --chart-1: #545dff;
+  --chart-2: #76beff;
+  --chart-3: #20fe8f;
+  --chart-4: #ff8371;
+  --chart-5: #000531;
+
+  --sidebar: #e6e7e8;
+  --sidebar-foreground: #000531;
+  --sidebar-primary: #76beff;
+  --sidebar-primary-foreground: #000531;
+  --sidebar-accent: rgba(0, 5, 49, 0.06);
+  --sidebar-accent-foreground: #000531;
+  --sidebar-border: rgba(0, 5, 49, 0.08);
+  --sidebar-ring: #545dff;
+}
+
+/* Dark theme — pure black with aurora-infused surfaces */
+.dark {
+  --background: #000213;
+  --foreground: #ffffff;
+
+  --card: rgba(255, 255, 255, 0.04);
+  --card-foreground: #ffffff;
+
+  --popover: #0a0a14;
+  --popover-foreground: #ffffff;
+
+  --primary: #20fe8f;
+  --primary-foreground: #000531;
+
+  --secondary: rgba(255, 255, 255, 0.06);
+  --secondary-foreground: #ffffff;
+
+  --muted: rgba(255, 255, 255, 0.04);
+  --muted-foreground: rgba(255, 255, 255, 0.58);
+
+  --accent: rgba(84, 93, 255, 0.16);
+  --accent-foreground: #ffffff;
+
+  --destructive: #ff8371;
+
+  --border: rgba(255, 255, 255, 0.245);
+  --input: rgba(255, 255, 255, 0.12);
+  --ring: #545dff;
+
+  --chart-1: #545dff;
+  --chart-2: #76beff;
+  --chart-3: #20fe8f;
+  --chart-4: #ff8371;
+  --chart-5: #ffffff;
+
+  --sidebar: #00010f;
+  --sidebar-foreground: #ffffff;
+  --sidebar-primary: #20fe8f;
+  --sidebar-primary-foreground: #000531;
+  --sidebar-accent: rgba(255, 255, 255, 0.06);
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: rgba(255, 255, 255, 0.08);
+  --sidebar-ring: #545dff;
+
+  /* Dark-mode shadows — tinted toward the Midnight (#000531) background so
+     shadows recede rather than glow. Light source top-left → cast down-right.
+     Pair a subtle deep-navy drop with a whisper of cool-grey rim for edge
+     definition without the "overpowering halo" effect. */
+  --shadow-2xs: 1px 2px 3px -1px rgb(0 5 49 / 0.5);
+  --shadow-xs: 2px 3px 6px -2px rgb(0 5 49 / 0.55);
+  --shadow-sm:
+    3px 5px 10px -3px rgb(0 5 49 / 0.6),
+    1px 2px 4px -2px rgb(0 5 49 / 0.4);
+  --shadow-md:
+    5px 8px 18px -5px rgb(0 5 49 / 0.65),
+    2px 3px 6px -3px rgb(0 5 49 / 0.45);
+  --shadow-lg:
+    10px 14px 28px -8px rgb(0 5 49 / 0.7),
+    4px 6px 10px -5px rgb(0 5 49 / 0.5);
+  --shadow-xl:
+    16px 22px 44px -12px rgb(0 5 49 / 0.75),
+    6px 10px 18px -8px rgb(0 5 49 / 0.55);
+  --shadow-2xl: 24px 32px 64px -16px rgb(0 5 49 / 0.85);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+}
+
+/* Tailwind v4 inlines --shadow-* values into the utility's --tw-shadow at
+   build time, so overriding --shadow-* under .dark has no runtime effect.
+   Re-point --tw-shadow for each utility under .dark to the dark-mode var. */
+@layer utilities {
+  .dark .shadow-2xs {
+    --tw-shadow: var(--shadow-2xs);
+  }
+  .dark .shadow-xs {
+    --tw-shadow: var(--shadow-xs);
+  }
+  .dark .shadow-sm {
+    --tw-shadow: var(--shadow-sm);
+  }
+  .dark .shadow {
+    --tw-shadow: var(--shadow-sm);
+  }
+  .dark .shadow-md {
+    --tw-shadow: var(--shadow-md);
+  }
+  .dark .shadow-lg {
+    --tw-shadow: var(--shadow-lg);
+  }
+  .dark .shadow-xl {
+    --tw-shadow: var(--shadow-xl);
+  }
+  .dark .shadow-2xl {
+    --tw-shadow: var(--shadow-2xl);
+  }
+}
+
+/* Aurora atmospheric backdrop — light mode: sky-blue-forward wash */
+.ds-aurora-bg {
+  background-image:
+    radial-gradient(
+      ellipse 70% 50% at 14% 10%,
+      rgba(118, 190, 255, 0.24),
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse 60% 45% at 92% 30%,
+      rgba(118, 190, 255, 0.16),
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse 70% 50% at 50% 95%,
+      rgba(84, 93, 255, 0.09),
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse 40% 30% at 78% 78%,
+      rgba(32, 254, 143, 0.07),
+      transparent 60%
+    );
+}
+
+/* Aurora atmospheric backdrop — dark mode: deeper, moodier */
+.dark .ds-aurora-bg {
+  background-image:
+    radial-gradient(
+      ellipse 60% 40% at 12% 8%,
+      rgba(84, 93, 255, 0.09),
+      transparent 55%
+    ),
+    radial-gradient(
+      ellipse 50% 35% at 92% 32%,
+      rgba(255, 131, 113, 0.06),
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse 70% 50% at 48% 92%,
+      rgba(32, 254, 143, 0.05),
+      transparent 60%
+    );
+}
+
+/* iOS-style glass surface helper */
+.ds-glass {
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+}
