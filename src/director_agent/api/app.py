@@ -16,6 +16,7 @@ GET  /substance.xlsx            -> Substance-only sheet (legacy convenience)
 from __future__ import annotations
 
 import io
+import os
 import uuid
 from functools import lru_cache
 from pathlib import Path
@@ -23,6 +24,7 @@ from typing import List, Optional
 
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.responses import FileResponse, JSONResponse, StreamingResponse
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, ConfigDict
 
 from ..bg import build_client
@@ -48,6 +50,11 @@ app.add_middleware(PasswordGateMiddleware)
 
 _STATIC_DIR = Path(__file__).resolve().parent / "static"
 _DEMO_STYLING = DATA_DIR / "styling" / "year_end_demo.json"
+# Built React SPA (web/out). When present, it's served at / and its assets fall
+# through to the StaticFiles mount registered at the bottom of this module.
+_WEB_DIST = Path(
+    os.environ.get("WEB_DIST", Path(__file__).resolve().parents[3] / "web" / "out")
+)
 
 XLSX_MEDIA = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 
@@ -116,6 +123,9 @@ def recommendations() -> dict:
 
 @app.get("/", include_in_schema=False)
 def index():
+    spa_index = _WEB_DIST / "index.html"
+    if spa_index.is_file():
+        return FileResponse(str(spa_index))
     return FileResponse(str(_STATIC_DIR / "index.html"))
 
 
@@ -326,3 +336,13 @@ def _brand_catalog_constraints():
         if key.startswith("product_catalog") and isinstance(sl.content, dict):
             return sl.content.get("available_hex"), sl.content.get("available_camera_angles")
     return None, None
+
+
+# --------------------------------------------------------------------------- #
+# Serve the built React SPA (web/out) when present. Registered LAST so every API
+# route above matches first; this mount then serves the SPA's static assets
+# (/_next, /brand, /fonts, favicon) and index.html. No-op in dev when web/out
+# doesn't exist (the Next dev server on :3000 is used then, proxying here).
+# --------------------------------------------------------------------------- #
+if _WEB_DIST.is_dir():
+    app.mount("/", StaticFiles(directory=str(_WEB_DIST), html=True), name="spa")

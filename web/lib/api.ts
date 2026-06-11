@@ -13,7 +13,9 @@ import type {
   TLFilters,
 } from "./types";
 
-const BASE = "/api/be";
+// Dev: "/api/be" (set in .env.development) → Next rewrites proxy to the backend.
+// Prod (static export served by FastAPI): "" → same-origin calls (/lanes, /run/cell …).
+const BASE = process.env.NEXT_PUBLIC_API_BASE ?? "";
 
 async function jsonFetch<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(`${BASE}${path}`, {

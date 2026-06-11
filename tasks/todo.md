@@ -113,3 +113,26 @@ Acting on the UX team's review + wireframe in
   which is now just a "Setup" label). Logo: `public/brand/DCP_Logos_DCP_Logo_2C_Violet-Midnight-Blue.svg`.
 - Added a "Scene N · what you're reviewing" block to the top of the review modal (scene
   description + vehicle/trim/super) so the concept has context; friendly subtitle (Scene N · technique).
+
+### Polish round 2 (2026-06-11)
+- Removed the cryptic unlabeled trim/SKU (D28H91) field from the scene header; super copy is now
+  a labeled, full-width, readable field. Super also gets an emphasized callout in the review modal.
+
+### PRODUCTION DEPLOY wired (2026-06-11) — single Render service, static export
+- Root cause the new UI wasn't showing live: Render only built/served the FastAPI backend
+  (`static/index.html`); the `web/` Next app was never built or served.
+- Fix (chosen: one Render service): two-stage Dockerfile — node stage runs `STATIC_EXPORT=1
+  npm run build` → `web/out`; python stage `COPY --from=web /web/out /app/web/out`. FastAPI
+  serves it (`WEB_DIST`): `GET /` returns the SPA index, a `StaticFiles` mount (registered last)
+  serves /_next, /brand, /fonts; all API routes match first. Same origin → no CORS; APP_PASSWORD
+  gate covers SPA + API together (browser caches Basic creds, re-sends on same-origin fetches).
+- API base: `web/lib/api.ts` BASE = `NEXT_PUBLIC_API_BASE ?? ""`. Dev sets `/api/be` via
+  `web/.env.development` (un-ignored) + Next rewrites; prod build leaves it unset → same-origin.
+- `next.config.ts`: STATIC_EXPORT=1 → `output:"export"` + drops rewrites (export ignores them).
+- `.dockerignore`: excludes web/node_modules, web/.next, web/out, index.dark-backup.html.
+- VERIFIED LOCALLY (= Docker behavior): `STATIC_EXPORT=1 npm run build` → web/out; uvicorn serves
+  `/` (SPA), `/lanes`, `/_next/*`, `/brand/*` all 200 same-origin; Playwright: SPA renders + loads
+  data, zero console errors. Dev (:3000 proxy) still works.
+- TO SHIP: commit + push to main (Render auto-redeploys). No Render env/config changes needed
+  (render.yaml unchanged; APP_PASSWORD/ANTHROPIC_API_KEY already set). First post-deploy hit may
+  cold-start 500 briefly (Starter tier) — that's the known cold-start, not a bug.

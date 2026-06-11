@@ -12,3 +12,8 @@ data/draftstore.sqlite
 data/project.json
 out/
 .DS_Store
+# web/ build artifacts — the Next build stage regenerates these
+web/node_modules/
+web/.next/
+web/out/
+index.dark-backup.html
