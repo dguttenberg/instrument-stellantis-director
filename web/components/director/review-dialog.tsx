@@ -124,26 +124,30 @@ export function ReviewDialog({
             <p className="mt-1.5 text-sm leading-relaxed">
               {scene.scene_description || "(no scene description)"}
             </p>
-            <div className="mt-2 flex flex-wrap gap-x-5 gap-y-1 text-xs">
+            {scene.super_intent && (
+              <div className="border-aurora-violet/40 bg-background mt-3 rounded-md border-l-2 px-3 py-2">
+                <span className="text-muted-foreground text-[10px] font-semibold uppercase tracking-[0.12em]">
+                  Super · on-screen copy
+                </span>
+                <p className="text-base font-medium leading-snug">
+                  {scene.super_intent}
+                </p>
+              </div>
+            )}
+            <div className="text-muted-foreground mt-2 flex flex-wrap gap-x-5 gap-y-1 text-xs">
               {scene.nameplate && (
                 <span>
-                  <span className="text-muted-foreground">Vehicle: </span>
+                  <span className="opacity-70">Vehicle: </span>
                   {scene.nameplate}
                 </span>
               )}
               {scene.trim_intent && (
                 <span>
-                  <span className="text-muted-foreground">Trim / SKU: </span>
+                  <span className="opacity-70">Trim / SKU: </span>
                   {scene.trim_intent}
                 </span>
               )}
-              {scene.super_intent && (
-                <span>
-                  <span className="text-muted-foreground">Super: </span>
-                  {scene.super_intent}
-                </span>
-              )}
-              <span className="font-mono text-[10px] text-muted-foreground/70">
+              <span className="font-mono text-[10px] opacity-60">
                 {env.cell_id}
               </span>
             </div>

@@ -383,27 +383,6 @@ function SceneGroup({
               ))}
             </SelectContent>
           </Select>
-          <div className="ml-auto flex gap-2">
-            <Input
-              defaultValue={scene.trim_intent ?? ""}
-              placeholder="trim / SKU"
-              className="h-8 w-36 text-xs"
-              onBlur={(e) =>
-                onPatchScene(scene.scene_index, { trim_intent: e.target.value })
-              }
-            />
-            <Input
-              defaultValue={scene.super_intent ?? ""}
-              placeholder="super copy"
-              className="h-8 w-48 text-xs"
-              onBlur={(e) =>
-                onPatchScene(scene.scene_index, {
-                  super_intent: e.target.value,
-                  super_called: !!e.target.value,
-                })
-              }
-            />
-          </div>
         </div>
         <Textarea
           defaultValue={scene.scene_description}
@@ -413,6 +392,23 @@ function SceneGroup({
             onPatchScene(scene.scene_index, { scene_description: e.target.value })
           }
         />
+        {/* Super — the on-screen copy, given real emphasis */}
+        <div className="mt-3">
+          <label className="text-muted-foreground mb-1 block text-[10px] font-semibold uppercase tracking-[0.12em]">
+            Super · on-screen copy
+          </label>
+          <Input
+            defaultValue={scene.super_intent ?? ""}
+            placeholder="No on-screen copy for this scene"
+            className="h-10 text-base font-medium"
+            onBlur={(e) =>
+              onPatchScene(scene.scene_index, {
+                super_intent: e.target.value,
+                super_called: !!e.target.value,
+              })
+            }
+          />
+        </div>
       </div>
 
       {/* Region cards */}
