@@ -189,6 +189,19 @@ Acting on the UX team's review + wireframe in
   is complete before scene N). Verified: 4 regions all "Directing…" on scene 1 together, scene 2
   waiting; orderly row-by-row fill.
 
+### Polish round 11 (2026-06-11) — fix dropped cell under concurrent run-all
+- Symptom: live, "Run all" started only 3 of 4 regions on a scene. Root cause confirmed via log:
+  `sqlite3.OperationalError: database is locked` — concurrent /run/cell writes to the draft store
+  on the single hosted instance (slow disk widened the lock window); the FE silently swallowed
+  the one failed cell. (Local didn't reproduce at 4; latency exposed it live.)
+- BACKEND (`draftstore/local_store.py`): serialize writers with a process `threading.Lock`
+  (single-process server), 30s busy_timeout so any residual contention WAITS instead of failing,
+  WAL set ONCE at init (per-connect WAL switching itself contended → caused double-500s; fixed),
+  connections closed via `closing()`. Verified: 40 concurrent writes → 40/40, 0 locks.
+- FE (`director-app.tsx`): `executeCell` retries a failed run up to 3× with backoff, so a
+  transient blip can't silently drop a cell.
+- VERIFIED: 51 tests pass; 8 concurrent /run/cell all 200, 0 server 500s; tsc clean; build passes.
+
 ## Review (front-end rebuild)
 - WORKING: new DCP-DS front end in `web/` (Next 16 + React 19 + Tailwind v4 + shadcn/radix-ui),
   proxying the untouched FastAPI backend via `/api/be/*` rewrites. Run: backend `uvicorn …:8000`
