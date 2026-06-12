@@ -180,6 +180,15 @@ Acting on the UX team's review + wireframe in
   editable footage-search query below. (Front-end gating by cell_type; no backend change.)
 - VERIFIED: 51 tests pass, tsc clean, static build passes, card + modal confirmed via Playwright.
 
+### Polish round 10 (2026-06-11) — fix run-all fill order
+- Regression from round 4: "Run all" ran each REGION in parallel with its scenes going down
+  independently → regions raced/desynced ("random, 4 at a time, no order").
+- Fixed: `runRegions` is now SCENE-MAJOR — outer loop scenes (sequential), inner `Promise.all`
+  over the selected regions. Each scene runs across all regions at once; the next scene starts
+  only when the row finishes. Continuity threads per region via a local `prior` map (scene N-1
+  is complete before scene N). Verified: 4 regions all "Directing…" on scene 1 together, scene 2
+  waiting; orderly row-by-row fill.
+
 ## Review (front-end rebuild)
 - WORKING: new DCP-DS front end in `web/` (Next 16 + React 19 + Tailwind v4 + shadcn/radix-ui),
   proxying the untouched FastAPI backend via `/api/be/*` rewrites. Run: backend `uvicorn …:8000`

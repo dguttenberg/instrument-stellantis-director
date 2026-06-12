@@ -248,22 +248,25 @@ export function DirectorApp() {
     [executeCell, results, scenes],
   );
 
-  // Run one or more whole regions. Regions run SIMULTANEOUSLY; within a region,
-  // scenes run in order so continuity threads scene→scene. Header shows progress.
+  // Run regions SCENE BY SCENE: each scene runs across all selected regions at once,
+  // and the next scene only starts once the current row finishes — an orderly fill,
+  // not regions racing independently. Continuity threads per region (scene N sees its
+  // own scene N-1, which is complete before scene N begins).
   const runRegions = useCallback(
     async (laneKeys: string[], label: string) => {
       if (!scenes.length || !laneKeys.length) return;
       setBulk({ active: true, done: 0, total: laneKeys.length * scenes.length, label });
-      const runOneRegion = async (lane: string) => {
-        let prior: unknown = null;
-        for (const s of scenes) {
-          const data = await executeCell(lane, s.scene_index, prior);
-          prior = data?.envelope ?? prior;
-          setBulk((b) => ({ ...b, done: b.done + 1 }));
-        }
-      };
+      const prior: Record<string, unknown> = {};
       try {
-        await Promise.all(laneKeys.map(runOneRegion)); // regions in parallel
+        for (const s of scenes) {
+          await Promise.all(
+            laneKeys.map(async (lane) => {
+              const data = await executeCell(lane, s.scene_index, prior[lane] ?? null);
+              prior[lane] = data?.envelope ?? prior[lane] ?? null;
+              setBulk((b) => ({ ...b, done: b.done + 1 }));
+            }),
+          );
+        }
       } finally {
         setBulk({ active: false, done: 0, total: 0, label: "" });
       }
