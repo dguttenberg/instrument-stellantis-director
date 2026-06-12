@@ -211,19 +211,33 @@ export function DirectorApp() {
       const key = `${lane}:${sceneIndex}`;
       setRunning((r) => ({ ...r, [key]: true }));
       try {
-        const data = await api.runCell({
-          lane,
-          scene_index: sceneIndex,
-          dials,
-          prior_cell_resolved: prior,
-        });
-        setResults((prev) => ({
-          ...prev,
-          [lane]: { ...(prev[lane] ?? {}), [sceneIndex]: data },
-        }));
-        return data;
-      } catch (e) {
-        setIngestStatus(`Run failed (scene ${sceneIndex}): ${(e as Error).message}`);
+        // Retry transient failures (e.g. brief write-lock contention when many regions
+        // run at once on the hosted instance) so a cell is never silently dropped.
+        const ATTEMPTS = 3;
+        let lastErr: unknown;
+        for (let attempt = 0; attempt < ATTEMPTS; attempt++) {
+          try {
+            const data = await api.runCell({
+              lane,
+              scene_index: sceneIndex,
+              dials,
+              prior_cell_resolved: prior,
+            });
+            setResults((prev) => ({
+              ...prev,
+              [lane]: { ...(prev[lane] ?? {}), [sceneIndex]: data },
+            }));
+            return data;
+          } catch (e) {
+            lastErr = e;
+            if (attempt < ATTEMPTS - 1) {
+              await new Promise((r) => setTimeout(r, 500 * (attempt + 1)));
+            }
+          }
+        }
+        setIngestStatus(
+          `Scene ${sceneIndex} (${lane}) failed after retries: ${(lastErr as Error)?.message ?? "error"}`,
+        );
         return null;
       } finally {
         setRunning((r) => {

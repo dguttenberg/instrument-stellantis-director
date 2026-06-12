@@ -5,6 +5,8 @@ from __future__ import annotations
 
 import json
 import sqlite3
+import threading
+from contextlib import closing
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import List, Optional
@@ -17,15 +19,23 @@ class LocalDraftStore:
     def __init__(self, db_path: Path):
         self.db_path = Path(db_path)
         self.db_path.parent.mkdir(parents=True, exist_ok=True)
+        # Single-process server → serialize writers so concurrent /run/cell calls (many
+        # regions at once) never collide on the SQLite write lock and drop a cell.
+        self._write_lock = threading.Lock()
         self._init_db()
 
     def _connect(self) -> sqlite3.Connection:
-        conn = sqlite3.connect(str(self.db_path))
+        # timeout/busy_timeout = writers WAIT for the lock instead of failing fast with
+        # "database is locked". WAL is set once in _init_db (not per-connect — switching
+        # journal mode on every concurrent connection itself contends).
+        conn = sqlite3.connect(str(self.db_path), timeout=30.0)
         conn.row_factory = sqlite3.Row
+        conn.execute("PRAGMA busy_timeout=30000")
         return conn
 
     def _init_db(self) -> None:
-        with self._connect() as conn:
+        with closing(self._connect()) as conn, conn:
+            conn.execute("PRAGMA journal_mode=WAL")  # persistent; set once
             conn.execute(
                 """
                 CREATE TABLE IF NOT EXISTS drafts (
@@ -44,7 +54,7 @@ class LocalDraftStore:
         approved = status == "auto_accept"  # high-confidence default-accepted (spec §7)
         created_at = datetime.now(timezone.utc).isoformat()
         envelope_json = envelope.model_dump_json()
-        with self._connect() as conn:
+        with self._write_lock, closing(self._connect()) as conn, conn:
             conn.execute(
                 """
                 INSERT INTO drafts (cell_id, cell_type, review_status, approved, envelope_json, created_at)
@@ -68,17 +78,17 @@ class LocalDraftStore:
         )
 
     def get(self, cell_id: str) -> Optional[DraftRecord]:
-        with self._connect() as conn:
+        with closing(self._connect()) as conn:
             row = conn.execute("SELECT * FROM drafts WHERE cell_id = ?", (cell_id,)).fetchone()
         return _row_to_record(row) if row else None
 
     def list(self) -> List[DraftRecord]:
-        with self._connect() as conn:
+        with closing(self._connect()) as conn:
             rows = conn.execute("SELECT * FROM drafts ORDER BY created_at").fetchall()
         return [_row_to_record(r) for r in rows]
 
     def approve(self, cell_id: str) -> Optional[DraftRecord]:
-        with self._connect() as conn:
+        with self._write_lock, closing(self._connect()) as conn, conn:
             cur = conn.execute("UPDATE drafts SET approved = 1 WHERE cell_id = ?", (cell_id,))
             if cur.rowcount == 0:
                 return None
