@@ -1,14 +1,20 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Play, RotateCcw, AlertTriangle, Loader2, PanelsTopLeft } from "lucide-react";
+import {
+  Play,
+  RotateCcw,
+  AlertTriangle,
+  Loader2,
+  PanelsTopLeft,
+  ChevronDown,
+} from "lucide-react";
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -18,6 +24,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { api } from "@/lib/api";
 import {
@@ -35,10 +49,11 @@ import { ReviewDialog } from "./review-dialog";
 import {
   cellTypeLabel,
   confidenceMarker,
-  outputChipLabel,
-  sortOutputs,
-  toolLabel,
+  directorNote,
+  displayFlags,
 } from "./helpers";
+import { TechniqueBadge } from "./technique-badge";
+import { IntelligenceFacets } from "./intelligence-facets";
 
 const DEFAULT_REGIONS = ["great_lakes", "southwest"];
 const EMPTY_REC: Recommendations = { recommendations: {}, tool_label: {} };
@@ -58,6 +73,12 @@ export function DirectorApp() {
   const [shownRegions, setShownRegions] = useState<string[]>([]);
   const [results, setResults] = useState<ResultMap>({});
   const [running, setRunning] = useState<Record<string, boolean>>({});
+  const [bulk, setBulk] = useState<{
+    active: boolean;
+    done: number;
+    total: number;
+    label: string;
+  }>({ active: false, done: 0, total: 0, label: "" });
   const [ingestStatus, setIngestStatus] = useState("");
   const [busy, setBusy] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -179,17 +200,17 @@ export function DirectorApp() {
     [],
   );
 
-  const runCell = useCallback(
-    async (lane: string, sceneIndex: number) => {
+  // Low-level: run one cell with an explicit prior envelope. Returns the result
+  // (or null on failure) so callers can thread continuity in a loop.
+  const executeCell = useCallback(
+    async (
+      lane: string,
+      sceneIndex: number,
+      prior: unknown,
+    ): Promise<RunCellResult | null> => {
       const key = `${lane}:${sceneIndex}`;
       setRunning((r) => ({ ...r, [key]: true }));
       try {
-        // thread the prior shown scene's envelope for continuity, if present
-        const ordered = scenes.map((s) => s.scene_index);
-        const pos = ordered.indexOf(sceneIndex);
-        const priorIdx = pos > 0 ? ordered[pos - 1] : undefined;
-        const prior =
-          priorIdx !== undefined ? results[lane]?.[priorIdx]?.envelope ?? null : null;
         const data = await api.runCell({
           lane,
           scene_index: sceneIndex,
@@ -200,8 +221,10 @@ export function DirectorApp() {
           ...prev,
           [lane]: { ...(prev[lane] ?? {}), [sceneIndex]: data },
         }));
+        return data;
       } catch (e) {
         setIngestStatus(`Run failed (scene ${sceneIndex}): ${(e as Error).message}`);
+        return null;
       } finally {
         setRunning((r) => {
           const next = { ...r };
@@ -210,7 +233,42 @@ export function DirectorApp() {
         });
       }
     },
-    [dials, results, scenes],
+    [dials],
+  );
+
+  // Single cell (button): prior = the previous shown scene's result, if any.
+  const runCell = useCallback(
+    (lane: string, sceneIndex: number) => {
+      const ordered = scenes.map((s) => s.scene_index);
+      const pos = ordered.indexOf(sceneIndex);
+      const prior =
+        pos > 0 ? results[lane]?.[ordered[pos - 1]]?.envelope ?? null : null;
+      return executeCell(lane, sceneIndex, prior);
+    },
+    [executeCell, results, scenes],
+  );
+
+  // Run one or more whole regions. Regions run SIMULTANEOUSLY; within a region,
+  // scenes run in order so continuity threads scene→scene. Header shows progress.
+  const runRegions = useCallback(
+    async (laneKeys: string[], label: string) => {
+      if (!scenes.length || !laneKeys.length) return;
+      setBulk({ active: true, done: 0, total: laneKeys.length * scenes.length, label });
+      const runOneRegion = async (lane: string) => {
+        let prior: unknown = null;
+        for (const s of scenes) {
+          const data = await executeCell(lane, s.scene_index, prior);
+          prior = data?.envelope ?? prior;
+          setBulk((b) => ({ ...b, done: b.done + 1 }));
+        }
+      };
+      try {
+        await Promise.all(laneKeys.map(runOneRegion)); // regions in parallel
+      } finally {
+        setBulk({ active: false, done: 0, total: 0, label: "" });
+      }
+    },
+    [executeCell, scenes],
   );
 
   const modalResult = modal ? results[modal.lane]?.[modal.idx] ?? null : null;
@@ -257,6 +315,59 @@ export function DirectorApp() {
               Stellantis Regional Director.
             </h1>
           </div>
+
+          {/* Run controls — all selected regions, or a single region */}
+          {scenes.length > 0 && (
+            <div className="ml-auto flex items-center gap-2">
+              {bulk.active && (
+                <span
+                  className="text-muted-foreground flex items-center gap-1.5 text-xs"
+                  aria-live="polite"
+                >
+                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                  {bulk.label} · {bulk.done}/{bulk.total}
+                </span>
+              )}
+              <Button
+                size="sm"
+                disabled={bulk.active || shownLanes.length === 0}
+                onClick={() =>
+                  runRegions(
+                    shownLanes.map((l) => l.key),
+                    "Running all regions",
+                  )
+                }
+              >
+                <Play className="h-4 w-4" />
+                Run all regions
+              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    disabled={bulk.active || shownLanes.length === 0}
+                    aria-label="Run a single region"
+                  >
+                    Run region
+                    <ChevronDown className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-52">
+                  <DropdownMenuLabel>Run one region</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  {shownLanes.map((l) => (
+                    <DropdownMenuItem
+                      key={l.key}
+                      onClick={() => runRegions([l.key], `Running ${l.label}`)}
+                    >
+                      {l.label}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          )}
         </header>
 
         <main className="ds-aurora-bg flex-1 px-5 py-6">
@@ -366,13 +477,14 @@ function SceneGroup({
           >
             {scene.scene_index}
           </span>
+          <TechniqueBadge cellType={scene.cell_type} iconOnly />
           <Select
             value={scene.cell_type}
             onValueChange={(v) =>
               onPatchScene(scene.scene_index, { cell_type: v as CellType })
             }
           >
-            <SelectTrigger size="sm" className="w-64">
+            <SelectTrigger size="sm" className="w-[19rem] max-w-full">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -460,24 +572,36 @@ function RegionCard({
   onOpen: () => void;
 }) {
   const env = result?.envelope;
-  const r = env ? rec.recommendations[env.cell_type] ?? {} : {};
   const marker = result ? confidenceMarker(result.record.review_status) : null;
-  const flags = env?.gaps_flagged ?? [];
+  const flags = displayFlags(env?.gaps_flagged);
+  const note = env ? directorNote(env, rec) : "";
+  // Existing footage defaults to reusing the core spot's shot as-is — no regionalized
+  // intelligence on the card; a footage-intelligence alternative is offered on open.
+  const isExisting = env?.cell_type === "existing_running_footage";
 
   return (
     <div
       className={cn(
         "bg-card flex min-h-[112px] flex-col gap-2 rounded-xl border p-3.5 shadow-sm transition-all",
-        result && "hover:border-aurora-green/60 cursor-pointer hover:-translate-y-0.5",
-        running && "border-sky-blue",
+        result &&
+          "hover:border-aurora-green-deep/50 cursor-pointer hover:-translate-y-0.5",
+        running && "border-sky-deep",
       )}
       onClick={() => result && onOpen()}
+      role={result ? "button" : undefined}
+      tabIndex={result ? 0 : undefined}
+      onKeyDown={(e) => {
+        if (result && (e.key === "Enter" || e.key === " ")) {
+          e.preventDefault();
+          onOpen();
+        }
+      }}
     >
       <div className="flex items-center justify-between gap-2">
         <span className="text-sm font-semibold">{laneLabel}</span>
         <Button
           size="sm"
-          variant={result ? "ghost" : "default"}
+          variant={result ? "outline" : "default"}
           className="h-7 px-2.5 text-xs"
           disabled={running}
           onClick={(e) => {
@@ -497,40 +621,46 @@ function RegionCard({
       </div>
 
       {!result && !running && (
-        <span className="text-muted-foreground/60 text-xs">Not run yet</span>
+        <span className="text-muted-foreground text-xs">Not run yet</span>
       )}
 
-      {running && (
-        <span className="text-sky-blue text-xs">Directing…</span>
-      )}
+      {running && <span className="text-sky-deep text-xs">Directing…</span>}
 
       {result && env && marker && (
         <>
-          <div className="flex items-center gap-2 text-xs">
-            {r.tool && (
-              <Badge variant="secondary" className="text-[10px]">
-                {toolLabel(rec, r.tool)}
-              </Badge>
-            )}
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs">
+            <TechniqueBadge cellType={env.cell_type} />
             <span className="text-muted-foreground inline-flex items-center gap-1">
               <span className={cn("leading-none", marker.dot)}>●</span>
               {marker.label}
             </span>
           </div>
-          <div className="flex flex-wrap gap-1.5">
-            {sortOutputs(env.outputs, env.cell_type, rec)
-              .slice(0, 4)
-              .map((o, i) => (
-                <Badge key={i} variant="outline" className="text-[10px] font-normal">
-                  {outputChipLabel(o)}
-                </Badge>
-              ))}
-          </div>
+          {isExisting ? (
+            <>
+              <p className="text-foreground text-xs">
+                Existing footage used — reused from the core spot.
+              </p>
+              <p className="text-sky-deep text-[11px]">
+                Regional alternative suggested — open to view
+              </p>
+            </>
+          ) : (
+            <>
+              {/* The three intelligences whose intersection drives this cell */}
+              <IntelligenceFacets intelligence={env.intelligence} />
+              {/* Synthesis — shown in full (no truncation) */}
+              {note && (
+                <p className="text-muted-foreground border-border border-l-2 pl-2 text-xs leading-snug">
+                  {note}
+                </p>
+              )}
+            </>
+          )}
           {flags.length > 0 && (
-            <div className="text-sunset-ember flex items-center gap-1 text-[11px]">
+            <span className="text-ember-deep inline-flex items-center gap-1 pt-1 text-[11px]">
               <AlertTriangle className="h-3 w-3" />
               {flags.length} flag{flags.length > 1 ? "s" : ""}
-            </div>
+            </span>
           )}
         </>
       )}

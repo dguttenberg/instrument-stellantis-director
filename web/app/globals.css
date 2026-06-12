@@ -84,6 +84,11 @@
   --color-aurora-violet: #545dff;
   --color-sky-blue: #76beff;
   --color-sunset-ember: #ff8371;
+  /* AA-accessible deep tones (>=4.5:1 on white) for text / icons / dots / borders
+     in light mode — the bright brand hues above fail contrast as foreground. */
+  --color-aurora-green-deep: #0b6f42;
+  --color-sky-deep: #205691;
+  --color-ember-deep: #b84535;
   --shadow-2xs: 1px 1px 0 rgb(0 0 0 / 0.05);
   --shadow-xs: 1px 1px 2px 0 rgb(0 0 0 / 0.05);
   --shadow-sm: 2px 2px 4px 0 rgb(0 0 0 / 0.1), 1px 1px 2px -1px rgb(0 0 0 / 0.1);

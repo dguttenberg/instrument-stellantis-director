@@ -95,6 +95,10 @@ export interface Envelope {
   cell_id: string;
   cell_type: CellType;
   draft: boolean;
+  // Director-written one-sentence descriptor (audience + location + brand voice).
+  synopsis?: string;
+  // The three intelligences behind the synopsis, kept separable for the matrix.
+  intelligence?: { brand?: string; location?: string; audience?: string };
   outputs: CellOutput[];
   gaps_flagged: string[];
   provenance: Provenance[];

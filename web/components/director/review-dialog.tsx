@@ -21,7 +21,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
+import { TechniqueBadge } from "./technique-badge";
+import { IntelligenceFacets } from "./intelligence-facets";
 import { api } from "@/lib/api";
 import type {
   CellOutput,
@@ -32,9 +33,9 @@ import type {
 } from "@/lib/types";
 import {
   cellTypeLabel,
-  humanize,
+  displayFlags,
+  outputLabel,
   sortOutputs,
-  toolLabel,
 } from "./helpers";
 
 interface ReviewDialogProps {
@@ -162,12 +163,44 @@ export function ReviewDialog({
           {r.headline && (
             <p className="mt-1.5 text-sm font-medium">
               {r.headline}
-              {r.tool && (
-                <Badge variant="secondary" className="ml-2 align-middle">
-                  {toolLabel(rec, r.tool)}
-                </Badge>
-              )}
+              <TechniqueBadge
+                cellType={env.cell_type}
+                className="ml-2 align-middle"
+              />
             </p>
+          )}
+          {env.cell_type === "existing_running_footage" ? (
+            <div className="mt-3 space-y-2">
+              <p className="text-foreground text-sm">
+                <span className="font-medium">Default — existing footage used.</span>{" "}
+                Reuse the core spot&apos;s shot for this scene as-is.
+              </p>
+              <div className="border-sky-deep/40 bg-sky-blue/10 rounded-md border p-3">
+                <div className="text-sky-deep text-[11px] font-semibold uppercase tracking-[0.12em]">
+                  Suggested regional alternative · Footage intelligence
+                </div>
+                <p className="text-muted-foreground mt-1 text-xs leading-relaxed">
+                  If you want a region-specific version, footage intelligence can find
+                  one — directed by:
+                </p>
+                <IntelligenceFacets intelligence={env.intelligence} className="mt-2" />
+                {env.synopsis && (
+                  <p className="text-foreground border-border mt-2 border-l-2 pl-2 text-sm leading-relaxed">
+                    {env.synopsis}
+                  </p>
+                )}
+              </div>
+            </div>
+          ) : (
+            <>
+              {/* Brand × Location × Audience — the three intelligences, then the synthesis */}
+              <IntelligenceFacets intelligence={env.intelligence} className="mt-3" />
+              {env.synopsis && (
+                <p className="text-foreground border-border mt-2 border-l-2 pl-2 text-sm leading-relaxed">
+                  {env.synopsis}
+                </p>
+              )}
+            </>
           )}
           {env.provenance.length > 0 && (
             <p className="text-muted-foreground mt-2 text-xs leading-relaxed">
@@ -176,7 +209,7 @@ export function ReviewDialog({
                 <span key={i}>
                   {i > 0 && " · "}
                   {p.bucket}{" "}
-                  <span className="text-aurora-green">
+                  <span className="text-aurora-green-deep">
                     ({p.scope_resolved} · {p.confidence})
                   </span>
                 </span>
@@ -197,10 +230,10 @@ export function ReviewDialog({
               }
             </p>
           )}
-          {env.gaps_flagged.length > 0 && (
-            <div className="text-sunset-ember mt-2 flex items-start gap-1.5 text-xs">
+          {displayFlags(env.gaps_flagged).length > 0 && (
+            <div className="text-ember-deep mt-2 flex items-start gap-1.5 text-xs">
               <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
-              <span>{env.gaps_flagged.join(" · ")}</span>
+              <span>{displayFlags(env.gaps_flagged).join(" · ")}</span>
             </div>
           )}
         </section>
@@ -213,8 +246,8 @@ export function ReviewDialog({
           {outputs.map((o, i) => (
             <div key={i} className="rounded-lg border p-3">
               <div className="mb-2 flex items-center justify-between gap-2">
-                <span className="text-aurora-green text-xs font-semibold uppercase tracking-wide">
-                  {humanize(o.type)}
+                <span className="text-aurora-green-deep text-xs font-semibold uppercase tracking-wide">
+                  {outputLabel(o.type)}
                 </span>
                 <Select
                   value={o.confidence}

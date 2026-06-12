@@ -116,7 +116,7 @@ export function AppSidebar(props: AppSidebarProps) {
                   >
                     <Icon
                       className={cn(
-                        done && "text-aurora-green",
+                        done && "text-aurora-green-deep",
                         active && "text-aurora-violet",
                         !done && !active && "text-muted-foreground/50",
                       )}
@@ -151,8 +151,8 @@ export function AppSidebar(props: AppSidebarProps) {
             className={cn(
               "flex cursor-pointer flex-col items-center gap-1.5 rounded-md border border-dashed p-4 text-center transition-colors",
               drag
-                ? "border-aurora-green bg-aurora-green/10"
-                : "border-input hover:border-aurora-green/60",
+                ? "border-aurora-green-deep bg-aurora-green-deep/10"
+                : "border-input hover:border-aurora-green-deep/60",
             )}
           >
             <FileUp className="text-muted-foreground h-5 w-5" />
@@ -195,7 +195,7 @@ export function AppSidebar(props: AppSidebarProps) {
                   <span className="flex items-center gap-1.5">
                     {d.name}
                     {d.live && (
-                      <span className="text-aurora-green inline-flex items-center gap-1 text-[10px] uppercase tracking-wide">
+                      <span className="text-aurora-green-deep inline-flex items-center gap-1 text-[10px] uppercase tracking-wide">
                         <span className="leading-none">●</span> live
                       </span>
                     )}
@@ -230,8 +230,8 @@ export function AppSidebar(props: AppSidebarProps) {
                   className={cn(
                     "rounded-full border px-2.5 py-1 text-[11px] font-semibold transition-colors",
                     on
-                      ? "border-aurora-green bg-aurora-green/15 text-aurora-green"
-                      : "border-input text-muted-foreground hover:border-aurora-green/60",
+                      ? "border-aurora-green-deep bg-aurora-green-deep/15 text-aurora-green-deep"
+                      : "border-input text-muted-foreground hover:border-aurora-green-deep/60",
                   )}
                 >
                   {l.abbrev}

@@ -170,12 +170,30 @@ class ProvenanceEntry(BaseModel):
     confidence: Confidence
 
 
+class SceneIntelligence(BaseModel):
+    """The three intelligences whose intersection drives the scene — each a short
+    phrase the director pulls from the matching Brand Gravity slices. Shown on the
+    matrix so the synthesis (synopsis) is visibly the product of brand × location ×
+    audience."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    brand: str = ""  # brand voice / positioning truth (tone_of_voice, creative_intent)
+    location: str = ""  # region / environment texture (environmental_context)
+    audience: str = ""  # audience segment / truth (audience_resonance)
+
+
 class CellOutputEnvelope(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     cell_id: str
     cell_type: CellType
     draft: bool = True
+    # Director-written: one-sentence descriptor weaving audience + location + brand
+    # voice from the resolved slices — the matrix's human-readable summary.
+    synopsis: str = ""
+    # The three intelligences behind the synopsis, kept separable for the UI.
+    intelligence: SceneIntelligence = Field(default_factory=SceneIntelligence)
     outputs: List[CellOutput]
     gaps_flagged: List[str] = Field(default_factory=list)
     # Set by the runner (not the director): the slices this cell resolved against,

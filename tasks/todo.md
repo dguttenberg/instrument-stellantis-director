@@ -88,6 +88,98 @@ Acting on the UX team's review + wireframe in
 - Phase 0 ingest integrity (backend): input-type detection + true inferred markers + field validation.
 - Production deploy (default: static-export served by FastAPI = one Render service; or split Next-on-Vercel→Render API). Flagged, deferred.
 
+### Polish round 3 (2026-06-11) — AA + run controls + director's notes
+- **AA (light mode):** bright brand hues fail contrast as foreground on white. Added deep tokens
+  to globals.css @theme — `aurora-green-deep #0b6f42`, `sky-deep #205691`, `ember-deep #b84535`
+  (all >=4.5:1). Swapped every green/sky/ember used as text/icon/dot/border (confidence dots,
+  region chips, step checks, dial LIVE, provenance, out-type, flags, running labels, card hover/
+  running borders). Bright hues now only fill buttons/backgrounds. Cards keyboard-focusable
+  (role/tabIndex/Enter-Space → open modal).
+- **Three run levels:** header "Run all regions" (all selected) + "Run region ▾" dropdown
+  (one region, all scenes) + existing per-card Run/Re-run (single cell). Sequential with
+  continuity threading; header shows live progress (done/total, aria-live). Refactored runCell →
+  executeCell(prior) + runRegions(laneKeys,label).
+- **Director's note on run cells:** `directorNote()` composes a brief synopsis from the primary
+  output (cg prompt / TL query / super / substance notes / stock desc / gap reason), line-clamped
+  to 3 lines on the card — a real preview of what you'll see before clicking in.
+- VERIFIED: tsc clean, prod static build passes, Playwright confirmed AA tones, director note on
+  card, run-all progress, sidebar AA. NOTE: a *director-written* synopsis (vs. composed-from-output)
+  would need a small backend field (Phase 1.3) — deferred.
+
+### Polish round 4 (2026-06-11) — parallel runs, find-vs-create, declutter
+- **Run all = simultaneous:** runRegions now `Promise.all`s the regions (parallel); scenes stay
+  sequential WITHIN a region for continuity. Verified 2 cells "Directing…" at once.
+- **Find vs create distinction (the key ask):** `toolMode()` maps tool → mode. twelvelabs =
+  **"Footage intelligence"** (find existing footage; sky tint + Search icon); cgai =
+  **"AI generation"** (create new with AI; violet tint + Sparkles icon). Replaces the old
+  "TwelveLabs"/"CG·AI" tags on cards + modal.
+- **Removed output-type chips** from cards (cg env prompt / super text / TL filters / substance —
+  "always the same, don't help"). Card now: mode badge + confidence marker + director's note + flags.
+- Friendly output labels in the modal edit blocks (`outputLabel`): Footage search, CG/AI
+  environment, Stock search, Substance variant, On-screen copy, Gap flag.
+- VERIFIED: tsc clean, prod static build passes, Playwright confirmed parallel run + both mode badges.
+
+### Polish round 5 (2026-06-11) — four techniques, not a binary
+- Replaced the 2-way find/create (toolMode) with a 4-way **technique by cell_type** (the script's
+  per-scene tagging): existing_running_footage = **Footage intelligence** (reuse/keep the shot,
+  sky + Search); stock = **Stock footage** (neutral + Film); regionalized_running_w_cgi_ai =
+  **CGI/AI hybrid** (violet + Blend); regionalized_ai_scenes = **Full CG/AI** (green + Sparkles).
+- New `<TechniqueBadge>` (icon + AA color + label) used on run cards + modal; icon-only chip in
+  each scene header beside the dropdown. `cellTypeLabel` now derives from `techniqueMode`, so the
+  dropdown / modal / badges all read the same technique name.
+- VERIFIED: tsc clean, prod static build passes, all four labels render (Playwright).
+- Wording is easy to tweak (e.g. "Stock footage"→"Stock generation", "Full CG/AI"→"AI generation").
+
+### Polish round 6 (2026-06-11) — FOLLOW THE SCRIPT's techniques
+- Read `_ref/MAP Retail Ram Test.pdf` "Process" page. The four techniques are DEFINED BY THE
+  SCRIPT (human tags shot style per scene; AI reacts). Replaced my invented labels with the
+  script's verbatim names + color coding + process notes (as tooltips):
+  - regionalized_running_w_cgi_ai → "Regionalized running footage w/CGI+AI" (cyan/sky, Blend)
+  - stock → "Stock" (green, Library)
+  - existing_running_footage → "Existing Running Footage" (magenta→violet, Film) = keep the shot
+  - regionalized_ai_scenes → "Regionalized AI scenes" (amber→ember, Sparkles)
+- cellTypeLabel + TechniqueBadge + dropdown all read the script names; badge rounded-md so the
+  long names wrap cleanly. Widened the scene-header dropdown. Tooltips carry the script's process.
+- VERIFIED: tsc clean, prod build passes, all four script names render, card badge wraps cleanly.
+
+### Polish round 7 (2026-06-11) — director synopsis (brand×location×audience)
+- BACKEND change (approved): director now emits a one-sentence `synopsis` weaving AUDIENCE
+  (audience_resonance) + LOCATION (environmental_context) + BRAND voice (tone/creative_intent) —
+  not the bare region name. Frame: "[audience truth] · [location texture] · [brand voice]".
+  - `_DirectorEmission.synopsis` (optional default "" so the mocked-director tests still validate;
+    prompt + schema description drive the model to fill it reliably — confirmed on live runs).
+  - `CellOutputEnvelope.synopsis`; `_finalize` passes it through; prompt rule added.
+- FE: `Envelope.synopsis`; `directorNote()` prefers it, falls back to the composed excerpt for
+  cells run before the field existed. Shown as the matrix card descriptor.
+- VERIFIED live (opus-4-8): hybrid/stock/existing all produce rich synopses, e.g. "For Southwest
+  Proud Workhorses, a HEMI badge glints in sharp winter desert light…". 51 backend tests pass,
+  tsc clean, static build passes, card shows the synopsis.
+
+### Polish round 8 (2026-06-11) — show the brand×location×audience intersection
+- Chosen viz (Doug): three labeled facets + synthesis on the matrix card.
+- BACKEND: director now also emits `intelligence {brand, location, audience}` (each <=6 words)
+  alongside the synopsis — `SceneIntelligence` model on the envelope + `_DirectorEmission`
+  (optional defaults so mocked tests still validate) + prompt rule. Verified live: e.g. brand
+  "HEMI V8 return, capability-led" · location "Great Lakes winter two-lanes, snowbanks" ·
+  audience "Proud Workhorses".
+- FE: `<IntelligenceFacets>` (color-keyed: Brand=violet, Location=sky, Audience=green) on the
+  card (above the synopsis) and in the modal's "Why" block. Synopsis now shows IN FULL (removed
+  the line-clamp) per Doug — not cut off; the modal scrolls for the full detail.
+- VERIFIED: 51 backend tests pass, tsc clean, static build passes, card + modal render the three
+  facets + full synopsis.
+
+### Polish round 9 (2026-06-11)
+- Flags: `displayFlags()` hides engineering diagnostics ("director emitted disallowed output
+  type … dropped") from the creative UI and strips the "invariant:" prefix; card + modal use it.
+- Synopsis: prompt updated to NOT lead with "For [audience]…" — it's a direct visual description
+  (location texture + brand voice); audience is shown as its own facet. Verified live.
+- Existing Running Footage = "keep the shot": card now just says "Existing footage used — reused
+  from the core spot" (no BG facets/synopsis), with a "Regional alternative suggested — open to
+  view" cue. The modal frames it as Default (existing) + a "Suggested regional alternative ·
+  Footage intelligence" callout containing the brand/location/audience facets + synopsis, with the
+  editable footage-search query below. (Front-end gating by cell_type; no backend change.)
+- VERIFIED: 51 tests pass, tsc clean, static build passes, card + modal confirmed via Playwright.
+
 ## Review (front-end rebuild)
 - WORKING: new DCP-DS front end in `web/` (Next 16 + React 19 + Tailwind v4 + shadcn/radix-ui),
   proxying the untouched FastAPI backend via `/api/be/*` rewrites. Run: backend `uvicorn …:8000`

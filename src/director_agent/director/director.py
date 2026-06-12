@@ -15,11 +15,11 @@ import json
 from typing import List, Optional
 
 import anthropic
-from pydantic import BaseModel, ConfigDict, ValidationError, model_validator
+from pydantic import BaseModel, ConfigDict, Field, ValidationError, model_validator
 
 from ..config import Settings, get_settings
 from ..schemas.bg import BGResponse
-from ..schemas.cell import CellInput, CellOutput, CellOutputEnvelope
+from ..schemas.cell import CellInput, CellOutput, CellOutputEnvelope, SceneIntelligence
 from ..schemas.dials import Dials, StylingInputs
 from .cell_specs import allowed_output_types
 from .prompt import build_system_prompt, build_user_payload
@@ -32,6 +32,24 @@ class _DirectorEmission(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
+    synopsis: str = Field(
+        default="",
+        description=(
+            "ONE sentence (max ~22 words), a director's-eye descriptor of what the "
+            "viewer will see — woven from the resolved slices as a mixture of AUDIENCE "
+            "truth + LOCATION/environment texture + BRAND voice. Concrete and specific; "
+            "never just the region name; no people. Natural prose, not labels."
+        ),
+    )
+    intelligence: SceneIntelligence = Field(
+        default_factory=SceneIntelligence,
+        description=(
+            "The three intelligences the synopsis is built from, each a short phrase "
+            "(<= 6 words): brand (voice/positioning), location (region/environment "
+            "texture), audience (segment/truth). Concrete and distinct; not the region "
+            "name alone."
+        ),
+    )
     outputs: List[CellOutput]
     gaps_flagged: List[str] = []
 
@@ -138,6 +156,8 @@ class Director:
             cell_id=cell.cell_id,
             cell_type=cell.cell_type,
             draft=True,
+            synopsis=emission.synopsis.strip(),
+            intelligence=emission.intelligence,
             outputs=kept,
             gaps_flagged=gaps,
         )

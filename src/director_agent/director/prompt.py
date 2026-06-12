@@ -90,6 +90,21 @@ Rules you must honor:
         GENERATIVE brief. There, be richly specific — palette, light, regional
         objects, negatives — because you're describing an image to create, not
         searching for one.
+  - You write a `synopsis`: ONE sentence (max ~22 words) describing what the viewer will
+    SEE in this cell — the environment, the vehicle, the framing — in the brand's voice,
+    grounded in the location texture (environmental_context) and informed by the audience.
+    Do NOT begin with "For [audience]..." or name the audience segment (it is shown
+    separately). NEVER just the region name, not a list of search terms, no people.
+    Example: "A salt-streaked Ram 1500 drives a snow-banked two-lane through bare winter
+    woods — capability, not postcard."
+  - You also fill `intelligence` with the THREE raw signals the synopsis is built from, each a
+    short phrase (<= 6 words), concrete and distinct (NOT the region name alone):
+      * intelligence.brand — brand voice / positioning truth (tone_of_voice / creative_intent /
+        product_catalog), e.g. "no-nonsense capability".
+      * intelligence.location — region / environment texture (environmental_context), e.g.
+        "Great Lakes winter two-lanes".
+      * intelligence.audience — audience segment / truth (audience_resonance), e.g.
+        "Proud Workhorses".
   - Output strictly matches the cell-type schema. No extra fields, no missing fields.
 
 You compose the cell output by calling the `emit_cell_output` tool exactly once.
